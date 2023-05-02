@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Buscar</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              poppins: "Poppins, sans-serif",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-poppins">
+    <section class="bg-stone-900 h-screen w-full flex">
+      <div th:replace="sidebar"></div>
+      <div class="h-screen w-full">
+        <div class="w-full py-4 pl-2 pr-4 h-20">
+          <div class="bg-stone-800 w-full h-full rounded-lg"></div>
+        </div>
+        <div class="w-full pl-2 pr-4 pb-4" style="height: calc(100vh - 80px)">
+          <div
+            class="px-8 py-6 bg-stone-800 rounded-lg h-full overflow-y-auto text-white"
+          >
+            <form
+              action="#"
+              th:action="@{/buscar}"
+              method="get"
+              class="grid grid-cols-12 gap-4 pb-6 border-b border-stone-400"
+            >
+              <div class="flex flex-col space-y-1.5 col-span-5">
+                <label for="" class="text-sm">Ingresar dato</label>
+                <input
+                  type="text"
+                  required
+                  autocomplete="off"
+                  class="bg-transparent px-3 py-1.5 border border-stone-400 w-full rounded-lg"
+                />
+              </div>
+              <div class="col-span-4 flex items-end">
+                <select
+                  required
+                  name=""
+                  id=""
+                  class="w-full bg-stone-800 py-1.5 px-3 border border-stone-400 rounded-lg"
+                >
+                  <option value="" hidden>Seleccionar campo</option>
+                  <option value="ruc_entidad">RUC de entidad</option>
+                  <option value="ruc_proveedor">RUC de proveedor</option>
+                  <option value="fecha_formalizacion">
+                    Fecha de formalización
+                  </option>
+                  <option value="acuerdo_marco">Acuerdo marco</option>
+                </select>
+              </div>
+              <div class="col-span-3 flex items-end">
+                <button
+                  type="submit"
+                  class="bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg shadow-lg shadow-green-500/50 w-full font-medium"
+                >
+                  Buscar
+                </button>
+              </div>
+            </form>
+            <div th:if="${results}">
+              <p>Pedro</p>
+            </div>
+            <div th:unless="${results}">
+              <p>No hay</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

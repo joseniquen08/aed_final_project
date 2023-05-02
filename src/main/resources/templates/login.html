@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              poppins: "Poppins, sans-serif",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-poppins">
+    <section class="bg-stone-900 h-screen w-full">
+      <div class="h-full w-full flex justify-center items-center">
+        <form
+          action="#"
+          th:action="@{/loginAction}"
+          th:object="${loginObject}"
+          method="post"
+          class="max-w-md w-full border border-green-500 rounded-xl px-10 py-8 text-center flex flex-col space-y-5 shadow-xl shadow-green-500/50"
+        >
+          <h1
+            class="text-4xl font-medium text-green-500"
+            th:text="'Bienvenid@'"
+          />
+          <p class="text-sm font-medium text-gray-500">
+            Ingresa tus credenciales para ingresar al sistema
+          </p>
+          <div class="text-white flex flex-col space-y-2.5">
+            <div class="flex flex-col items-start space-y-1">
+              <label for="username" class="text-sm">Usuario</label>
+              <input
+                type="text"
+                required
+                th:field="*{username}"
+                class="bg-transparent px-3 py-1.5 border w-full rounded-lg"
+              />
+            </div>
+            <div class="flex flex-col items-start space-y-1">
+              <label for="password" class="text-sm">Contraseña</label>
+              <input
+                type="password"
+                required
+                th:field="*{password}"
+                class="bg-transparent px-3 py-1.5 border w-full rounded-lg"
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg shadow-lg shadow-green-500/50"
+          >
+            Ingresar
+          </button>
+          <p class="text-sm font-medium text-gray-500">
+            ¿No tienes una cuenta? <a th:href="@{/register}">Regístrate aquí</a>
+          </p>
+        </form>
+      </div>
+    </section>
+  </body>
+</html>

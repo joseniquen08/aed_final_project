@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Inicio</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              poppins: "Poppins, sans-serif",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-poppins">
+    <section class="bg-stone-900 h-screen w-full flex">
+      <div th:replace="sidebar"></div>
+      <div class="h-screen w-full">
+        <div class="w-full py-4 pl-2 pr-4 h-20">
+          <div class="bg-stone-800 w-full h-full rounded-lg"></div>
+        </div>
+        <div class="px-4 py-2">
+          <h1 class="text-xl text-red-500" th:text="'Hello!'" />
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
