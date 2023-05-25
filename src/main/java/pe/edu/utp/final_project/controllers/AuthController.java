@@ -28,8 +28,6 @@ public class AuthController {
       model.addAttribute("loginObject", login);
       return "login";
     }
-    // Cookie cookie = new Cookie("setUser", setUser);
-    // model.addAttribute("cookieValue", cookie);
     return "redirect:/";
   }
 
@@ -59,5 +57,13 @@ public class AuthController {
       return "redirect:/login";
     }
     return "redirect:/register";
+  }
+
+  @GetMapping("/logout")
+  public String logout(HttpServletResponse response) {
+    Cookie deleteCookie = new Cookie("setUser", null);
+    deleteCookie.setMaxAge(0);
+    response.addCookie(deleteCookie);
+    return "redirect:/login";
   }
 }

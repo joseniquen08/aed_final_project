@@ -3,6 +3,17 @@
   <head>
     <title>Buscar</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -20,23 +31,23 @@
     <section class="bg-stone-900 h-screen w-full flex">
       <div th:replace="~{sidebar}"></div>
       <div class="h-screen w-full">
-        <div class="w-full py-4 pl-2 pr-4 h-20">
-          <div class="bg-stone-800 w-full h-full rounded-lg"></div>
-        </div>
+        <div th:replace="~{navbar}"></div>
         <div class="w-full pl-2 pr-4 pb-4" style="height: calc(100vh - 80px)">
           <div
-            class="px-8 py-6 bg-stone-800 rounded-lg h-full overflow-y-auto text-white"
+            class="px-6 py-6 bg-stone-800 rounded-lg h-full overflow-y-auto text-white"
           >
             <form
               action="#"
               th:action="@{/buscar}"
-              method="get"
+              method="post"
               class="grid grid-cols-12 gap-4 pb-6 border-b border-stone-400"
             >
               <div class="flex flex-col space-y-1.5 col-span-5">
                 <label for="" class="text-sm">Ingresar dato</label>
                 <input
                   type="text"
+                  name="query"
+                  th:value="${query}"
                   required
                   autocomplete="off"
                   class="bg-transparent px-3 py-1.5 border border-stone-400 w-full rounded-lg"
@@ -44,18 +55,18 @@
               </div>
               <div class="col-span-4 flex items-end">
                 <select
+                  name="type"
+                  th:value="${type}"
                   required
-                  name=""
-                  id=""
                   class="w-full bg-stone-800 py-1.5 px-3 border border-stone-400 rounded-lg"
                 >
                   <option value="" hidden>Seleccionar campo</option>
-                  <option value="ruc_entidad">RUC de entidad</option>
-                  <option value="ruc_proveedor">RUC de proveedor</option>
-                  <option value="fecha_formalizacion">
+                  <option value="3">RUC de entidad</option>
+                  <option value="1">RUC de proveedor</option>
+                  <option value="10">
                     Fecha de formalización
                   </option>
-                  <option value="acuerdo_marco">Acuerdo marco</option>
+                  <option value="18">Acuerdo marco</option>
                 </select>
               </div>
               <div class="col-span-3 flex items-end">
@@ -67,15 +78,18 @@
                 </button>
               </div>
             </form>
-            <div th:if="${results}">
-              <p>Pedro</p>
-            </div>
-            <div th:unless="${results}">
-              <p>No hay</p>
+            <div class="px-4 py-3">
+              <div th:if="${results}">
+                <p th:text="${results}" />
+              </div>
+              <div th:unless="${results}">
+                <p class="text-center text-stone-400">Realiza una búsqueda para obtener resultados</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
   </body>
 </html>

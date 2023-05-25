@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Navbar</title>
+  </head>
+  <body>
+    <div th:fragment="navbar">
+      <div class="w-full py-4 pl-2 pr-4 h-20">
+        <div
+          class="bg-stone-800 w-full h-full rounded-lg text-white px-6 py-2"
+        >
+          <div class="flex justify-between items-center h-full">
+            <p>Hola, <span th:text="${usernameCk}" /></p>
+            <button
+              id="dropdownUser"
+              type="button"
+              class="h-8 w-8 bg-stone-700 rounded-full flex items-center justify-center hover:bg-opacity-80"
+              data-dropdown-toggle="dropdown"
+              data-dropdown-placement="top-end"
+            >
+              <i class="fas fa-user"></i>
+            </button>
+            <div id="dropdown" class="z-10 hidden bg-stone-900 rounded-lg shadow-lg shadow-stone-900/50 border border-stone-700">
+              <ul class="py-2" aria-labelledby="dropdownUser">
+                <li>
+                  <a th:href="@{/logout}" class="block px-4 py-2 hover:bg-stone-800">Cerrar sesión</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
