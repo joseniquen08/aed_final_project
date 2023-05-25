@@ -45,10 +45,13 @@ public class AuthController {
   }
 
   @GetMapping("/register")
-  public String register(Model model) {
+  public String register(@CookieValue(value = "setUser", defaultValue = "") String setUser, Model model) {
     Register register = new Register();
-    model.addAttribute("registerObject", register);
-    return "register";
+    if (setUser.isEmpty()) {
+      model.addAttribute("registerObject", register);
+      return "register";
+    }
+    return "redirect:/";
   }
 
   @PostMapping("/registerAction")
