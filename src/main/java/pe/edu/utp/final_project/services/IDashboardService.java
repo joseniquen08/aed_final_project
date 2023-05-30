@@ -1,5 +1,7 @@
 package pe.edu.utp.final_project.services;
 
+import pe.edu.utp.final_project.domain.dashboard.SearchResponse;
+
 public interface IDashboardService {
-  boolean searchFisrt(String value, String type);
+  SearchResponse searchFisrt(String value, String type);
 }

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Prueba</title>
+  </head>
+  <body>
+    <tr th:fragment="nodes" th:if="${results.results != null}">
+      <td th:text="${results.results.header.value.fecha_proceso}"></td>
+      <div th:replace="buscar :: nodos(${results.results.header.next})"></div>
+    </tr>
+  </body>
+</html>

@@ -30,7 +30,7 @@
   <body class="font-poppins">
     <section class="bg-stone-900 h-screen w-full flex">
       <div th:replace="~{sidebar}"></div>
-      <div class="h-screen w-full">
+      <div class="h-screen w-full overflow-hidden">
         <div th:replace="~{navbar}"></div>
         <div class="w-full pl-2 pr-4 pb-4" style="height: calc(100vh - 80px)">
           <div
@@ -80,7 +80,35 @@
             </form>
             <div class="px-4 py-3">
               <div th:if="${results}">
-                <p th:text="${results}" />
+                <div class="relative overflow-x-auto">
+                  <table class="w-full text-xs text-left text-stone-300">
+                    <thead class="text-stone-100 uppercase bg-stone-900">
+                      <tr>
+                        <th scope="col" th:each="title, index : ${results.headers}" th:text="${title}" th:if="${title != null}" th:classappend="${index.first ? 'rounded-l-xl' : (index.last ? 'rounded-r-xl' : '')}" class="px-6 py-3 overflow-hidden"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="item : ${results.results}">
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.fecha_proceso}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.ruc_proveedor}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.proveedor}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.ruc_entidad}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.entidad}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.tipo_procedimiento}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.orden_electronica}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap"><a target="_blank" rel="noopener noreferrer" th:href="${item.orden_electronica_generada}">Link</a></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.estado_orden_electronica}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap"><a target="_blank" rel="noopener noreferrer" th:href="${item.documento_estado_ocam}">Link</a></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.fecha_formalizacion}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.fecha_ultimo_estado}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.sub_total}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.igv}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.total}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap"><a target="_blank" rel="noopener noreferrer" th:href="${item.orden_digitalizada}">Link</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <div th:unless="${results}">
                 <p class="text-center text-stone-400">Realiza una búsqueda para obtener resultados</p>
