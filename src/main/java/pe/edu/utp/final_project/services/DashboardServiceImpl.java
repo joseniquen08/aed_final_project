@@ -29,13 +29,13 @@ public class DashboardServiceImpl implements IDashboardService {
         String[] record;
 
         int cont = 0;
-        String[] arrayHeader = new String[16];
+        String[] arrayHeader = new String[19];
         SearchResponse response = new SearchResponse();
         LinkedList<SearchItem> list = new LinkedList<>();
 
         while ((record = openCSVReader.readNext()) != null) {
           if (cont == 0) {
-            for (int i = 0; i < 16; i++) {
+            for (int i = 0; i < 19; i++) {
               arrayHeader[i] = record[i];
             }
           } else {
@@ -43,7 +43,7 @@ public class DashboardServiceImpl implements IDashboardService {
               SearchItem item = new SearchItem(record[0], record[1], record[2], record[3], record[4], record[5],
                   record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13],
                   record[14],
-                  record[15]);
+                  record[15], record[16], record[17], record[18]);
               list.addToEnd(item);
             }
           }

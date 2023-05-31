@@ -95,11 +95,11 @@
                 <div class="px-6 py-3 text-sm flex items-center justify-between">
                   <p class="text-stone-400">Valor buscado: <span th:text="${query}" class="text-stone-100"></span></p>
                   <div>
-                    <button data-modal-target="filterModal" data-modal-toggle="filterModal" class="inline-flex items-center text-stone-300 border border-stone-300 focus:outline-none hover:bg-stone-700 focus:ring-0 font-medium rounded-lg px-4 py-1.5" type="button">
+                    <button data-modal-target="filterModal" data-modal-toggle="filterModal" class="inline-flex items-center text-stone-100 border border-stone-300 focus:outline-none hover:bg-stone-700 focus:ring-0 font-medium rounded-lg px-4 py-1.5" type="button">
                       Filtrar
                     </button>
                     <div id="filterModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                      <div class="relative w-full max-w-6xl max-h-full">
+                      <div class="relative w-full max-w-5xl max-h-full">
                         <div class="relative bg-stone-800 rounded-xl p-1 shadow">
                           <div class="flex items-center justify-between p-4">
                             <p class="text-base font-medium">Filtrar</p>
@@ -107,8 +107,68 @@
                               <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                             </button>
                           </div>
-                          <div class="p-4">
-                            <p>Pedro</p>
+                          <div class="px-4 pb-4 flex space-x-4">
+                            <div class="">
+                              <ul class="w-48 font-medium text-left border border-stone-300 rounded-lg overflow-hidden" id="filterTabs" data-tabs-toggle="#filterTabsContent" role="tablist">
+                                <li class="w-full" role="presentation">
+                                  <button class="inline-block w-full px-4 py-2" id="ruc-entidad-tab" data-tabs-target="#ruc-entidad" type="button" role="tab" aria-controls="ruc-entidad" aria-selected="false">RUC Entidad</button>
+                                </li>
+                                <li class="w-full" role="presentation">
+                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="entidad-tab" data-tabs-target="#entidad" type="button" role="tab" aria-controls="entidad" aria-selected="false">Entidad</button>
+                                </li>
+                                <li class="w-full" role="presentation">
+                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="ruc-proveedor-tab" data-tabs-target="#ruc-proveedor" type="button" role="tab" aria-controls="ruc-proveedor" aria-selected="false">RUC Proveedor</button>
+                                </li>
+                                <li class="w-full" role="presentation">
+                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="proveedor-tab" data-tabs-target="#proveedor" type="button" role="tab" aria-controls="proveedor" aria-selected="false">Proveedor</button>
+                                </li>
+                                <li class="w-full" role="presentation">
+                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="fecha-formalizacion-tab" data-tabs-target="#fecha-formalizacion" type="button" role="tab" aria-controls="fecha-formalizacion" aria-selected="false">Fecha de formalización</button>
+                                </li>
+                                <li class="w-full" role="presentation">
+                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="acuerdo-marco-tab" data-tabs-target="#acuerdo-marco" type="button" role="tab" aria-controls="acuerdo-marco" aria-selected="false">Acuerdo de marco</button>
+                                </li>
+                                <li class="w-full" role="presentation">
+                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="tipo-procedimiento-tab" data-tabs-target="#tipo-procedimiento" type="button" role="tab" aria-controls="tipo-procedimiento" aria-selected="false">Tipo de procedimiento</button>
+                                </li>
+                                <li class="w-full" role="presentation">
+                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="estado-orden-electronica-tab" data-tabs-target="#estado-orden-electronica" type="button" role="tab" aria-controls="estado-orden-electronica" aria-selected="false">Estado de orden electrónica</button>
+                                </li>
+                              </ul>
+                            </div>
+                            <div id="filterTabsContent" class="w-full">
+                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="ruc-entidad" role="tabpanel" aria-labelledby="ruc-entidad-tab">
+                                <div class="flex items-center mb-4">
+                                  <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                  <label for="default-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Default checkbox</label>
+                                </div>
+                                <div class="flex items-center">
+                                  <input checked id="checked-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                  <label for="checked-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Checked state</label>
+                                </div>
+                              </div>
+                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="entidad" role="tabpanel" aria-labelledby="entidad-tab">
+                                <p>Pedro</p>
+                              </div>
+                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="ruc-proveedor" role="tabpanel" aria-labelledby="ruc-proveedor-tab">
+                                <p>Pedro</p>
+                              </div>
+                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="proveedor" role="tabpanel" aria-labelledby="proveedor-tab">
+                                <p>Pedro</p>
+                              </div>
+                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="fecha-formalizacion" role="tabpanel" aria-labelledby="fecha-formalizacion-tab">
+                                <p>Pedro</p>
+                              </div>
+                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="acuerdo-marco" role="tabpanel" aria-labelledby="acuerdo-marco-tab">
+                                <p>Pedro</p>
+                              </div>
+                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="tipo-procedimiento" role="tabpanel" aria-labelledby="tipo-procedimiento-tab">
+                                <p>Pedro</p>
+                              </div>
+                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="estado-orden-electronica" role="tabpanel" aria-labelledby="estado-orden-electronica-tab">
+                                <p>Pedro</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -140,6 +200,9 @@
                         <td class="px-6 py-4 whitespace-nowrap" th:text="${item.igv}"></td>
                         <td class="px-6 py-4 whitespace-nowrap" th:text="${item.total}"></td>
                         <td class="px-6 py-4 whitespace-nowrap underline"><a target="_blank" rel="noopener noreferrer" th:href="${item.orden_digitalizada}">Link de descarga</a></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.descripcion_estado}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.descripcion_cesion_derechos}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.acuerdo_marco}"></td>
                       </tr>
                     </tbody>
                     <caption th:if="${#lists.size(results.results) == 0}" align="bottom" class="px-6 py-4">

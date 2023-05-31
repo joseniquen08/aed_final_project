@@ -27,7 +27,11 @@ public class Stack<E> {
     return this.top.getValue();
   }
 
-  public void search(E query) {
+  public boolean filter() {
+    return true;
+  }
+
+  public void searchCont(E query) {
     if (isEmpty()) {
       throw new NoSuchElementException("La pila está vacía.");
     }
