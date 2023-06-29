@@ -10,6 +10,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import pe.edu.utp.final_project.domain.auth.Login;
 import pe.edu.utp.final_project.domain.auth.Register;
 
@@ -26,7 +27,8 @@ public class AuthServiceImpl implements IAuthService {
         String[] record;
 
         while ((record = openCSVReader.readNext()) != null) {
-          if (record[1].equals(login.getUsername()) && record[2].equals(login.getPassword())) {
+          BCrypt.Result result = BCrypt.verifyer().verify(login.getPassword().toCharArray(), record[2]);
+          if (record[1].equals(login.getUsername()) && result.verified) {
             return true;
           }
         }
@@ -46,7 +48,8 @@ public class AuthServiceImpl implements IAuthService {
       FileWriter fileWriter = new FileWriter(filePath, true);
 
       CSVWriter openCsvWriter = new CSVWriter(fileWriter);
-      String[] record = { register.getFullname(), register.getUsername(), register.getPassword() };
+      String[] record = { register.getFullname(), register.getUsername(),
+          BCrypt.withDefaults().hashToString(12, register.getPassword().toCharArray()) };
       openCsvWriter.writeNext(record);
       openCsvWriter.close();
     } catch (IOException e) {
