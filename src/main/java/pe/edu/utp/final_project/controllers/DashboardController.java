@@ -34,7 +34,7 @@ public class DashboardController {
   public String buscarAction(@RequestParam("query") String query, @RequestParam("type") String type,
       HttpServletRequest request, Model model) {
     model.addAttribute("module", "buscar");
-    model.addAttribute("results", dashboardServiceImpl.searchFisrt(query, type));
+    model.addAttribute("results", dashboardServiceImpl.searchFisrt(query, type, 1));
     model.addAttribute("query", query);
     model.addAttribute("type", type);
     return getUsernameFromCookies(request, model, "buscar");

@@ -19,7 +19,7 @@ import pe.edu.utp.final_project.domain.dashboard.SearchResponse;
 public class DashboardServiceImpl implements IDashboardService {
 
   @Override
-  public SearchResponse searchFisrt(String value, String type) {
+  public SearchResponse searchFisrt(String value, String type, int page) {
     try {
       String filePath = "./src/main/resources/files/ReportePCBienes202201.csv";
       FileReader fileReader = new FileReader(filePath);
@@ -50,17 +50,36 @@ public class DashboardServiceImpl implements IDashboardService {
           cont++;
         }
 
-        SearchItem[] items = new SearchItem[list.size()];
+        int totalPages = (int) Math.ceil((double) list.size() / 5);
+        int[] pages = new int[totalPages];
+
+        int length = totalPages == page && list.size() % 5 != 0 ? list.size() % 5 : 5;
+
+        SearchItem[] items = new SearchItem[list.size() != 0 ? length : 0];
 
         Node<SearchItem> currentNode = list.header;
 
+        int auxCont = 0;
+
         for (int i = 0; i < list.size(); i++) {
-          items[i] = currentNode.getValue();
+          if (i >= (page - 1) * 5 && i < page * 5) {
+            items[auxCont] = currentNode.getValue();
+            auxCont++;
+          }
           currentNode = currentNode.getNext();
+        }
+
+        for (int i = 0; i < pages.length; i++) {
+          pages[i] = i + 1;
         }
 
         response.setHeaders(arrayHeader);
         response.setResults(items);
+        response.setValue(value);
+        response.setType(type);
+        response.setTotal(list.size());
+        response.setPage(page);
+        response.setPages(pages);
 
         return response;
       }

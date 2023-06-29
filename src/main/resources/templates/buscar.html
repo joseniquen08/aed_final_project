@@ -1,265 +1,327 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <title>Buscar</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              poppins: "Poppins, sans-serif",
-            },
+
+<head>
+  <title>Buscar</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+    integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            inter: "Inter, sans-serif",
           },
         },
-      };
-    </script>
-    <style>
-      ::-webkit-scrollbar {
-        width: 12px;
-        height: 12px;
-        background: #000;
-      }
+      },
+    };
+  </script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+      background: #000;
+    }
 
-      ::-webkit-scrollbar-thumb {
-        background: #22C55E;
-        border-radius: 10px;
-        border: 2px solid #000;
-      }
-    </style>
-  </head>
-  <body class="font-poppins">
-    <section class="bg-stone-900 h-screen w-full flex">
-      <div th:replace="~{sidebar}"></div>
-      <div class="h-screen w-full overflow-hidden">
-        <div th:replace="~{navbar}"></div>
-        <div class="w-full pl-2 pr-4 pb-4" style="height: calc(100vh - 80px)">
-          <div
-            class="px-6 py-6 bg-stone-800 rounded-lg h-full overflow-y-auto text-white"
-          >
-            <form
-              action="#"
-              th:action="@{/buscar}"
-              method="post"
-              class="grid grid-cols-12 gap-4 pb-6 border-b border-stone-400"
-            >
-              <div class="flex flex-col space-y-1.5 col-span-5">
-                <label for="" class="text-sm">Ingresar dato</label>
-                <input
-                  type="text"
-                  name="query"
-                  required
-                  autocomplete="off"
-                  class="bg-transparent px-3 py-1.5 border border-stone-400 w-full rounded-lg"
-                />
-              </div>
-              <div class="col-span-4 flex items-end">
-                <select
-                  name="type"
-                  required
-                  class="w-full bg-stone-800 py-1.5 px-3 border border-stone-400 rounded-lg"
-                >
-                  <option value="" hidden>Seleccionar campo</option>
-                  <option value="1">RUC de proveedor</option>
-                  <option value="3">RUC de entidad</option>
-                  <option value="10">
-                    Fecha de formalización
-                  </option>
-                  <option value="18">Acuerdo marco</option>
-                </select>
-              </div>
-              <div class="col-span-3 flex items-end">
-                <button
-                  type="submit"
-                  class="bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg shadow-lg shadow-green-500/50 w-full font-medium"
-                >
-                  Buscar
-                </button>
-              </div>
-            </form>
-            <div class="px-4 py-3">
-              <div th:if="${results}">
-                <div class="px-6 py-3 text-sm flex items-center justify-between">
-                  <p class="text-stone-400">Valor buscado: <span th:text="${query}" class="text-stone-100"></span></p>
-                  <div>
-                    <button data-modal-target="filterModal" data-modal-toggle="filterModal" class="inline-flex items-center text-stone-100 border border-stone-300 focus:outline-none hover:bg-stone-700 focus:ring-0 font-medium rounded-lg px-4 py-1.5" type="button">
-                      Filtrar
-                    </button>
-                    <div id="filterModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                      <div class="relative w-full max-w-5xl max-h-full">
-                        <div class="relative bg-stone-800 rounded-xl p-1 shadow">
-                          <div class="flex items-center justify-between p-4">
-                            <p class="text-base font-medium">Filtrar</p>
-                            <button type="button" class="text-stone-200 bg-transparent hover:bg-stone-700/50 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-hide="filterModal">
-                              <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                            </button>
+    ::-webkit-scrollbar-thumb {
+      background: #22C55E;
+      border-radius: 10px;
+      border: 2px solid #000;
+    }
+
+    [aria-selected="true"] {
+      color: #22C55E !important;
+    }
+  </style>
+</head>
+
+<body class="font-inter">
+  <section class="bg-stone-900 h-screen w-full flex">
+    <div th:replace="~{sidebar}"></div>
+    <div class="h-screen w-full overflow-hidden">
+      <div th:replace="~{navbar}"></div>
+      <div class="w-full pl-2 pr-4 pb-4" style="height: calc(100vh - 80px)">
+        <div class="px-6 py-6 bg-stone-800 rounded-lg h-full overflow-y-auto text-white">
+          <div class="grid grid-cols-12 gap-4 pb-6 border-b border-stone-400">
+            <div class="flex flex-col space-y-1.5 col-span-5">
+              <label for="" class="text-sm">Ingresar dato</label>
+              <input type="text" name="query" id="query" required autocomplete="off"
+                class="bg-transparent px-3 py-1.5 border border-stone-400 w-full rounded-lg" />
+            </div>
+            <div class="col-span-4 flex items-end">
+              <select name="type" id="type" required
+                class="w-full bg-stone-800 py-1.5 px-3 border border-stone-400 rounded-lg">
+                <option value="" hidden>Seleccionar campo</option>
+                <option value="1">RUC de proveedor</option>
+                <option value="3">RUC de entidad</option>
+                <option value="10">
+                  Fecha de formalización
+                </option>
+                <option value="18">Acuerdo marco</option>
+              </select>
+            </div>
+            <div class="col-span-3 flex items-end">
+              <button type="button" onclick="buscar()"
+                class="bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg w-full font-medium">
+                Buscar
+              </button>
+            </div>
+          </div>
+          <div class="px-4 py-3">
+            <div id="responseContainer" class="hidden">
+              <div id="optionsContainer" class="px-6 py-3 text-sm flex items-center justify-between">
+                <p id="searchValue" class="text-stone-400"></p>
+                <div>
+                  <button data-modal-target="filterModal" data-modal-toggle="filterModal"
+                    class="inline-flex items-center text-stone-100 border border-stone-300 focus:outline-none hover:bg-stone-700 focus:ring-0 font-medium rounded-lg px-4 py-1.5"
+                    type="button">
+                    Filtrar
+                  </button>
+                  <div id="filterModal" tabindex="-1" aria-hidden="true"
+                    class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div class="relative w-full max-w-5xl max-h-full">
+                      <div class="relative bg-stone-800 rounded-xl p-1 shadow">
+                        <div class="flex items-center justify-between p-4">
+                          <p class="text-base font-medium">Filtrar</p>
+                          <button type="button"
+                            class="text-stone-200 bg-transparent hover:bg-stone-700/50 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                            data-modal-hide="filterModal">
+                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                            </svg>
+                          </button>
+                        </div>
+                        <div class="px-4 pb-4 flex space-x-4">
+                          <div class="">
+                            <ul
+                              class="w-48 font-medium text-left border border-stone-300 rounded-lg overflow-hidden py-2"
+                              id="filterTabs" data-tabs-toggle="#filterTabsContent" role="tablist">
+                              <li class="w-full" role="presentation">
+                                <button class="inline-block w-full px-4 py-2" id="ruc_entidad-tab"
+                                  data-tabs-target="#ruc_entidad" type="button" role="tab" aria-controls="ruc_entidad"
+                                  aria-selected="false">RUC Entidad</button>
+                              </li>
+                              <li class="w-full" role="presentation">
+                                <button
+                                  class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
+                                  id="entidad-tab" data-tabs-target="#entidad" type="button" role="tab"
+                                  aria-controls="entidad" aria-selected="false">Entidad</button>
+                              </li>
+                              <li class="w-full" role="presentation">
+                                <button
+                                  class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
+                                  id="ruc_proveedor-tab" data-tabs-target="#ruc_proveedor" type="button" role="tab"
+                                  aria-controls="ruc_proveedor" aria-selected="false">RUC Proveedor</button>
+                              </li>
+                              <li class="w-full" role="presentation">
+                                <button
+                                  class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
+                                  id="proveedor-tab" data-tabs-target="#proveedor" type="button" role="tab"
+                                  aria-controls="proveedor" aria-selected="false">Proveedor</button>
+                              </li>
+                              <li class="w-full" role="presentation">
+                                <button
+                                  class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
+                                  id="fecha_formalizacion-tab" data-tabs-target="#fecha_formalizacion" type="button"
+                                  role="tab" aria-controls="fecha_formalizacion" aria-selected="false">Fecha de
+                                  formalización</button>
+                              </li>
+                              <li class="w-full" role="presentation">
+                                <button
+                                  class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
+                                  id="acuerdo_marco-tab" data-tabs-target="#acuerdo_marco" type="button" role="tab"
+                                  aria-controls="acuerdo_marco" aria-selected="false">Acuerdo de marco</button>
+                              </li>
+                              <li class="w-full" role="presentation">
+                                <button
+                                  class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
+                                  id="tipo_procedimiento-tab" data-tabs-target="#tipo_procedimiento" type="button"
+                                  role="tab" aria-controls="tipo_procedimiento" aria-selected="false">Tipo de
+                                  procedimiento</button>
+                              </li>
+                              <li class="w-full" role="presentation">
+                                <button
+                                  class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
+                                  id="estado_orden_electronica-tab" data-tabs-target="#estado_orden_electronica"
+                                  type="button" role="tab" aria-controls="estado_orden_electronica"
+                                  aria-selected="false">Estado de orden electrónica</button>
+                              </li>
+                            </ul>
                           </div>
-                          <div class="px-4 pb-4 flex space-x-4">
-                            <div class="">
-                              <ul class="w-48 font-medium text-left border border-stone-300 rounded-lg overflow-hidden" id="filterTabs" data-tabs-toggle="#filterTabsContent" role="tablist">
-                                <li class="w-full" role="presentation">
-                                  <button class="inline-block w-full px-4 py-2" id="ruc-entidad-tab" data-tabs-target="#ruc-entidad" type="button" role="tab" aria-controls="ruc-entidad" aria-selected="false">RUC Entidad</button>
-                                </li>
-                                <li class="w-full" role="presentation">
-                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="entidad-tab" data-tabs-target="#entidad" type="button" role="tab" aria-controls="entidad" aria-selected="false">Entidad</button>
-                                </li>
-                                <li class="w-full" role="presentation">
-                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="ruc-proveedor-tab" data-tabs-target="#ruc-proveedor" type="button" role="tab" aria-controls="ruc-proveedor" aria-selected="false">RUC Proveedor</button>
-                                </li>
-                                <li class="w-full" role="presentation">
-                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="proveedor-tab" data-tabs-target="#proveedor" type="button" role="tab" aria-controls="proveedor" aria-selected="false">Proveedor</button>
-                                </li>
-                                <li class="w-full" role="presentation">
-                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="fecha-formalizacion-tab" data-tabs-target="#fecha-formalizacion" type="button" role="tab" aria-controls="fecha-formalizacion" aria-selected="false">Fecha de formalización</button>
-                                </li>
-                                <li class="w-full" role="presentation">
-                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="acuerdo-marco-tab" data-tabs-target="#acuerdo-marco" type="button" role="tab" aria-controls="acuerdo-marco" aria-selected="false">Acuerdo de marco</button>
-                                </li>
-                                <li class="w-full" role="presentation">
-                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="tipo-procedimiento-tab" data-tabs-target="#tipo-procedimiento" type="button" role="tab" aria-controls="tipo-procedimiento" aria-selected="false">Tipo de procedimiento</button>
-                                </li>
-                                <li class="w-full" role="presentation">
-                                  <button class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="estado-orden-electronica-tab" data-tabs-target="#estado-orden-electronica" type="button" role="tab" aria-controls="estado-orden-electronica" aria-selected="false">Estado de orden electrónica</button>
-                                </li>
-                              </ul>
-                            </div>
-                            <div id="filterTabsContent" class="w-full">
-                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="ruc-entidad" role="tabpanel" aria-labelledby="ruc-entidad-tab">
-                                <div class="flex items-center mb-4">
-                                  <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                  <label for="default-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Default checkbox</label>
-                                </div>
-                                <div class="flex items-center">
-                                  <input checked id="checked-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                  <label for="checked-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Checked state</label>
-                                </div>
-                              </div>
-                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="entidad" role="tabpanel" aria-labelledby="entidad-tab">
-                                <p>Pedro</p>
-                              </div>
-                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="ruc-proveedor" role="tabpanel" aria-labelledby="ruc-proveedor-tab">
-                                <p>Pedro</p>
-                              </div>
-                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="proveedor" role="tabpanel" aria-labelledby="proveedor-tab">
-                                <p>Pedro</p>
-                              </div>
-                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="fecha-formalizacion" role="tabpanel" aria-labelledby="fecha-formalizacion-tab">
-                                <p>Pedro</p>
-                              </div>
-                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="acuerdo-marco" role="tabpanel" aria-labelledby="acuerdo-marco-tab">
-                                <p>Pedro</p>
-                              </div>
-                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="tipo-procedimiento" role="tabpanel" aria-labelledby="tipo-procedimiento-tab">
-                                <p>Pedro</p>
-                              </div>
-                              <div class="hidden w-full p-4 rounded-lg border border-stone-300" id="estado-orden-electronica" role="tabpanel" aria-labelledby="estado-orden-electronica-tab">
-                                <p>Pedro</p>
-                              </div>
-                            </div>
+                          <div id="filterTabsContent" class="w-full h-96">
+                            <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
+                              id="ruc_entidad" role="tabpanel" aria-labelledby="ruc_entidad-tab"></div>
+                            <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
+                              id="entidad" role="tabpanel" aria-labelledby="entidad-tab"></div>
+                            <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
+                              id="ruc_proveedor" role="tabpanel" aria-labelledby="ruc_proveedor-tab"></div>
+                            <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
+                              id="proveedor" role="tabpanel" aria-labelledby="proveedor-tab"></div>
+                            <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
+                              id="fecha_formalizacion" role="tabpanel" aria-labelledby="fecha_formalizacion-tab"></div>
+                            <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
+                              id="acuerdo_marco" role="tabpanel" aria-labelledby="acuerdo_marco-tab"></div>
+                            <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
+                              id="tipo_procedimiento" role="tabpanel" aria-labelledby="tipo_procedimiento-tab"></div>
+                            <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
+                              id="estado_orden_electronica" role="tabpanel"
+                              aria-labelledby="estado_orden_electronica-tab"></div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="relative overflow-x-auto">
-                  <table class="w-full text-xs text-left text-stone-300">
-                    <thead class="text-stone-100 uppercase bg-stone-900">
-                      <tr>
-                        <th scope="col" th:each="title, index : ${results.headers}" th:text="${title}" th:if="${title != null}" th:classappend="${index.first ? 'rounded-l-xl' : (index.last ? 'rounded-r-xl' : '')}" class="px-6 py-3 overflow-hidden"></th>
-                      </tr>
-                    </thead>
-                    <tbody th:if="${#lists.size(results.results) > 0}">
-                      <tr th:each="item : ${results.results}">
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.fecha_proceso}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.ruc_proveedor}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.proveedor}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.ruc_entidad}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.entidad}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.tipo_procedimiento}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.orden_electronica}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap underline"><a target="_blank" rel="noopener noreferrer" th:href="${item.orden_electronica_generada}">Link de descarga</a></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.estado_orden_electronica}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap underline"><a target="_blank" rel="noopener noreferrer" th:href="${item.documento_estado_ocam}">Link de descarga</a></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.fecha_formalizacion}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.fecha_ultimo_estado}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.sub_total}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.igv}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.total}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap underline"><a target="_blank" rel="noopener noreferrer" th:href="${item.orden_digitalizada}">Link de descarga</a></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.descripcion_estado}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.descripcion_cesion_derechos}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap" th:text="${item.acuerdo_marco}"></td>
-                      </tr>
-                    </tbody>
-                    <caption th:if="${#lists.size(results.results) == 0}" align="bottom" class="px-6 py-4">
-                      <p class="text-sm text-left font-normal text-stone-300">No hay resultados</p>
-                    </caption>
-                  </table>
-                </div>
-                <nav th:if="${#lists.size(results.results) > 0}" class="py-8 flex justify-center">
-                  <ul class="inline-flex items-center -space-x-px text-white text-sm">
-                    <li>
-                      <a href="#" class="px-3 py-2 leading-tight bg-stone-800 border border-stone-400 rounded-l-lg hover:bg-stone-700">
-                        Anterior
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="px-3 py-2 leading-tight bg-stone-800 border border-stone-400 hover:bg-stone-700">1</a>
-                    </li>
-                    <li>
-                      <a href="#" class="px-3 py-2 leading-tight bg-stone-800 border border-stone-400 hover:bg-stone-700">2</a>
-                    </li>
-                    <li>
-                      <a href="#" aria-current="page" class="z-10 px-3 py-2 leading-tight border border-stone-400 bg-stone-800 hover:bg-stone-700">3</a>
-                    </li>
-                    <li>
-                      <a href="#" class="px-3 py-2 leading-tight bg-stone-800 border border-stone-400 hover:bg-stone-700">4</a>
-                    </li>
-                    <li>
-                      <a href="#" class="px-3 py-2 leading-tight bg-stone-800 border border-stone-400 hover:bg-stone-700">5</a>
-                    </li>
-                    <li>
-                      <a href="#" class="px-3 py-2 leading-tight bg-stone-800 border border-stone-400 rounded-r-lg hover:bg-stone-700">
-                        Siguiente
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
               </div>
-              <div th:unless="${results}">
-                <p class="text-center text-stone-400">Realiza una búsqueda para obtener resultados</p>
-              </div>
+              <div id="tableContainer" class="relative overflow-x-auto"></div>
+              <nav id="paginationContainer" class="py-8 flex flex-col items-center space-y-4 justify-center"></nav>
+            </div>
+            <div id="defaultContainer">
+              <p class="text-center text-stone-400">Realiza una búsqueda para obtener resultados</p>
             </div>
           </div>
         </div>
       </div>
-    </section>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
+    </div>
+  </section>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+  <script>
+
+    const buscar = () => {
+      if ($("#query").val() !== "" && $("#type").val() !== "") {
+        const value = $("#query").val();
+        const type = $("#type").val();
+
         $.ajax({
-          url: "/api/hola",
-          data: {},
-          success: function(response) {
-            console.log(response);
+          type: "POST",
+          url: "/api/buscar",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify({
+            value,
+            type,
+            page: 1,
+          }),
+          dataType: "json",
+          success: function (response) {
+            renderResponse(response);
           },
-          error: function() {},
+          error: function () { },
         });
+      }
+    };
+
+    const paginar = (value, type, page) => {
+      $.ajax({
+        type: "POST",
+        url: "/api/paginar",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+          value,
+          type,
+          page,
+        }),
+        dataType: "json",
+        success: function (response) {
+          renderResponse(response);
+        },
+        error: function () { },
       });
-    </script>
-  </body>
+    };
+
+    const renderResponse = (response) => {
+      console.log("🚀 ~ file: buscar.html:371 ~ renderResponse ~ response:", response);
+      const { headers, page, pages, results, total, value, type } = response;
+
+      $("#searchValue").html(`Valor buscado: <span class="text-stone-100">${value}</span>`);
+
+      ["ruc_entidad", "entidad", "ruc_proveedor", "proveedor", "fecha_formalizacion", "acuerdo_marco", "tipo_procedimiento", "estado_orden_electronica"].forEach((type) => {
+        $(`#${type}`).html(`
+          ${results.length > 0 ? `
+              <div class="flex flex-col space-y-4">
+                ${results.filter((item, index, self) => {
+          return self.findIndex((t) => t[type] === item[type]) === index;
+        }).map(item => `
+                  <div class="flex items-center">
+                    <input id="${item[type]}" type="checkbox" checked value="${item[type]}" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2" />
+                    <label for="${item[type]}" class="ml-2 text-sm font-medium">${item[type]}</label>
+                  </div>
+                `).join('')}
+              </div>
+            `
+            : `
+              <p class="text-center text-stone-500">No hay resultados para filtrar</p>
+            `}
+        `);
+      });
+
+      const tableContainer = `
+        <table class="w-full text-xs text-left text-stone-300">
+          <thead class="text-stone-100 uppercase bg-stone-900">
+            <tr>
+              ${headers.map((title, index) => `
+                <th scope="col" class="px-6 py-3 overflow-hidden ${index === 0 ? 'rounded-l-xl' : (index === headers.length - 1 ? 'rounded-r-xl' : '')}">${title}</th>
+              `).join('')}
+            </tr>
+          </thead>
+          ${results.length > 0 ? `
+            <tbody>
+              ${results.map(item => `
+                <tr>
+                  ${Object.keys(item).map((key, index) => `
+                    <td class="px-6 py-4 whitespace-nowrap">${(index === 7 || index === 9 || index === 15) && item[key] !== "" ? `<a target="_blank" rel="noopener noreferrer" class="underline" href="${item[key]}">Link de descarga</a>` : item[key]}</td>
+                  `).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          ` : `
+            <caption align="bottom" class="px-6 py-4">
+              <p class="text-sm text-left font-normal text-stone-300">No hay resultados</p>
+            </caption>
+          `}
+        </table>
+      `;
+
+      if (results.length > 0) {
+        const paginationContainer = `
+          <p class="text-center font-medium text-sm text-stone-400">Total de resultados: ${total}</p>
+          <ul class="inline-flex items-center -space-x-px text-white text-sm">
+            <li>
+              <button type="button" ${page === 1 ? 'disabled' : `onclick="paginar('${value}', ${type}, ${page - 1})"`} class="px-3 py-2 leading-tight border border-stone-400 rounded-l-lg bg-stone-800 ${page === 1 ? 'text-stone-400 bg-opacity-80 cursor-not-allowed' : 'hover:bg-stone-700'}">Anterior</button>
+            </li>
+            ${pages.map(item => `
+              <li>
+                <button type="button" onclick="paginar('${value}', ${type}, ${item})" class="px-3 py-2 leading-tight border border-stone-400 ${item === page ? 'bg-green-600 hover:bg-green-700' : 'bg-stone-800 hover:bg-stone-700'}">${item}</button>
+              </li>
+            `).join('')}
+            <li>
+              <button type="button" ${page === pages.length ? 'disabled' : `onclick="paginar('${value}', ${type}, ${page + 1})"`} class="px-3 py-2 leading-tight bg-stone-800 border border-stone-400 rounded-r-lg ${page === pages.length ? 'text-stone-400 bg-opacity-80 cursor-not-allowed' : 'hover:bg-stone-700'}">Siguiente</button>
+            </li>
+          </ul>
+        `;
+        $("#paginationContainer").html(paginationContainer);
+      } else {
+        $("#paginationContainer").html("");
+      }
+
+      $("#tableContainer").html(tableContainer);
+      $("#defaultContainer").addClass("hidden");
+      $("#responseContainer").removeClass("hidden");
+    }
+  </script>
+</body>
+
 </html>
