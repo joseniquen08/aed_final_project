@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import pe.edu.utp.final_project.domain.dashboard.FiltersRequest;
 import pe.edu.utp.final_project.services.DashboardServiceImpl;
 
 @Controller
@@ -34,7 +35,7 @@ public class DashboardController {
   public String buscarAction(@RequestParam("query") String query, @RequestParam("type") String type,
       HttpServletRequest request, Model model) {
     model.addAttribute("module", "buscar");
-    model.addAttribute("results", dashboardServiceImpl.searchFisrt(query, type, 1));
+    model.addAttribute("results", dashboardServiceImpl.searchFisrt(query, type, 1, new FiltersRequest[0]));
     model.addAttribute("query", query);
     model.addAttribute("type", type);
     return getUsernameFromCookies(request, model, "buscar");

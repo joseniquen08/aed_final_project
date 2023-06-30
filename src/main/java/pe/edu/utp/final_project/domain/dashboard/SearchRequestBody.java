@@ -4,6 +4,7 @@ public class SearchRequestBody {
   private String value;
   private String type;
   private int page;
+  private FiltersRequest[] filters;
 
   public String getValue() {
     return value;
@@ -27,5 +28,13 @@ public class SearchRequestBody {
 
   public void setPage(int page) {
     this.page = page;
+  }
+
+  public FiltersRequest[] getFilters() {
+    return filters;
+  }
+
+  public void setFilters(FiltersRequest[] filters) {
+    this.filters = filters;
   }
 }

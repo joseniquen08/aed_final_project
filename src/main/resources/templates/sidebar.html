@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="UTF-8" />
@@ -8,7 +8,7 @@
 
 <body>
   <div th:fragment="sidebar">
-    <div class="w-80 py-4 pl-4 pr-2 h-full flex-none">
+    <div class="w-80 py-4 pl-4 pr-2 h-full flex-none hidden md:block">
       <div class="w-full h-full bg-stone-800 rounded-lg flex flex-col text-white px-8 py-6 space-y-8">
         <img src="/images/logo_mef.png" alt="" class="w-48 rounded" />
         <p class="text-xl font-medium">Sistema de Búsquedas y Estadísticas</p>
@@ -37,7 +37,52 @@
         </ul>
       </div>
     </div>
+    <div id="drawer-sidebar"
+      class="fixed top-0 left-0 z-40 h-screen p-1 overflow-y-auto transition-transform -translate-x-full bg-stone-800 w-80"
+      tabindex="-1" aria-labelledby="drawer-label">
+      <button type="button" data-drawer-hide="drawer-sidebar" aria-controls="drawer-sidebar"
+        class="text-stone-300 bg-transparent hover:bg-stone-900 rounded-lg text-sm p-1.5 absolute top-3 right-3 inline-flex items-center">
+        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"></path>
+        </svg>
+        <span class="sr-only">Close menu</span>
+      </button>
+      <div class="w-full h-full flex flex-col text-white px-8 py-6 space-y-8">
+        <img src="/images/logo_mef.png" alt="" class="w-48 rounded" />
+        <p class="text-xl font-medium">Sistema de Búsquedas y Estadísticas</p>
+        <ul class="flex flex-col space-y-5">
+          <li>
+            <a th:href="@{/}"
+              th:classappend="${module == 'index' ? 'bg-green-500 shadow-lg shadow-green-600/50 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
+              class="inline-flex w-full px-4 py-2 rounded-lg">
+              Inicio
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/buscar}"
+              th:classappend="${module == 'buscar' ? 'bg-green-500 shadow-lg shadow-green-600/50 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
+              class="inline-flex w-full px-4 py-2 rounded-lg">
+              Búsquedas
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/estadísticas}"
+              th:classappend="${module == 'estadisticas' ? 'bg-green-500 shadow-lg shadow-green-600/50 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
+              class="inline-flex w-full px-4 py-2 rounded-lg">
+              Estadísticas
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
+  <script>
+    console.log("first");
+    localStorage.setItem("sidebar_expand", true);
+  </script>
 </body>
 
 </html>

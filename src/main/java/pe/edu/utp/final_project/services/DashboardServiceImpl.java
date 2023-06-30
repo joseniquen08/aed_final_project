@@ -12,6 +12,7 @@ import com.opencsv.exceptions.CsvValidationException;
 
 import pe.edu.utp.final_project.classes.LinkedList;
 import pe.edu.utp.final_project.classes.Node;
+import pe.edu.utp.final_project.domain.dashboard.FiltersRequest;
 import pe.edu.utp.final_project.domain.dashboard.SearchItem;
 import pe.edu.utp.final_project.domain.dashboard.SearchResponse;
 
@@ -19,7 +20,7 @@ import pe.edu.utp.final_project.domain.dashboard.SearchResponse;
 public class DashboardServiceImpl implements IDashboardService {
 
   @Override
-  public SearchResponse searchFisrt(String value, String type, int page) {
+  public SearchResponse searchFisrt(String value, String type, int page, FiltersRequest[] filters) {
     try {
       String filePath = "./src/main/resources/files/ReportePCBienes202201.csv";
       FileReader fileReader = new FileReader(filePath);

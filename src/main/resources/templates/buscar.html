@@ -51,17 +51,17 @@
     <div th:replace="~{sidebar}"></div>
     <div class="h-screen w-full overflow-hidden">
       <div th:replace="~{navbar}"></div>
-      <div class="w-full pl-2 pr-4 pb-4" style="height: calc(100vh - 80px)">
+      <div class="w-full pl-2 pr-2 md:pr-4 pb-4" style="height: calc(100vh - 80px)">
         <div class="px-6 py-6 bg-stone-800 rounded-lg h-full overflow-y-auto text-white">
           <div class="grid grid-cols-12 gap-4 pb-6 border-b border-stone-400">
-            <div class="flex flex-col space-y-1.5 col-span-5">
+            <div class="flex flex-col space-y-1.5 col-span-12 md:col-span-5">
               <label for="" class="text-sm">Ingresar dato</label>
               <input type="text" name="query" id="query" required autocomplete="off"
-                class="bg-transparent px-3 py-1.5 border border-stone-400 w-full rounded-lg" />
+                class="bg-transparent px-3 py-1.5 border border-stone-400 w-full rounded-lg focus:ring-green-500 focus:border-green-500" />
             </div>
-            <div class="col-span-4 flex items-end">
+            <div class="col-span-12 md:col-span-4 flex items-end">
               <select name="type" id="type" required
-                class="w-full bg-stone-800 py-1.5 px-3 border border-stone-400 rounded-lg">
+                class="w-full bg-stone-800 py-1.5 px-3 border border-stone-400 rounded-lg focus:ring-green-500 focus:border-green-500">
                 <option value="" hidden>Seleccionar campo</option>
                 <option value="1">RUC de proveedor</option>
                 <option value="3">RUC de entidad</option>
@@ -71,14 +71,14 @@
                 <option value="18">Acuerdo marco</option>
               </select>
             </div>
-            <div class="col-span-3 flex items-end">
+            <div class="col-span-12 md:col-span-3 flex items-end">
               <button type="button" onclick="buscar()"
                 class="bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg w-full font-medium">
                 Buscar
               </button>
             </div>
           </div>
-          <div class="px-4 py-3">
+          <div class="px-0 md:px-4 py-3">
             <div id="responseContainer" class="hidden">
               <div id="optionsContainer" class="px-6 py-3 text-sm flex items-center justify-between">
                 <p id="searchValue" class="text-stone-400"></p>
@@ -105,10 +105,10 @@
                             </svg>
                           </button>
                         </div>
-                        <div class="px-4 pb-4 flex space-x-4">
+                        <div class="px-4 pb-4 flex space-x-2.5 md:space-x-4">
                           <div class="">
                             <ul
-                              class="w-48 font-medium text-left border border-stone-300 rounded-lg overflow-hidden py-2"
+                              class="w-48 font-medium text-xs md:text-sm text-left border border-stone-300 rounded-lg overflow-hidden py-2"
                               id="filterTabs" data-tabs-toggle="#filterTabsContent" role="tablist">
                               <li class="w-full" role="presentation">
                                 <button class="inline-block w-full px-4 py-2" id="ruc_entidad-tab"
@@ -214,12 +214,15 @@
             value,
             type,
             page: 1,
+            filters: [],
           }),
           dataType: "json",
           success: function (response) {
             renderResponse(response);
           },
-          error: function () { },
+          error: function (e) {
+            console.log(e);
+          },
         });
       }
     };
@@ -233,18 +236,21 @@
           value,
           type,
           page,
+          filters: [],
         }),
         dataType: "json",
         success: function (response) {
           renderResponse(response);
         },
-        error: function () { },
+        error: function (e) {
+          console.log(e);
+        },
       });
     };
 
     const renderResponse = (response) => {
-      console.log("🚀 ~ file: buscar.html:371 ~ renderResponse ~ response:", response);
       const { headers, page, pages, results, total, value, type } = response;
+      console.log("🚀 ~ file: buscar.html:251 ~ renderResponse ~ response:", response);
 
       $("#searchValue").html(`Valor buscado: <span class="text-stone-100">${value}</span>`);
 
@@ -253,11 +259,12 @@
           ${results.length > 0 ? `
               <div class="flex flex-col space-y-4">
                 ${results.filter((item, index, self) => {
+          // TODO hacer un onclick para filtrar por cada item, algo asi filterBy(type, item[type]), primero el tipo y luego el valor
           return self.findIndex((t) => t[type] === item[type]) === index;
         }).map(item => `
-                  <div class="flex items-center">
+                  <div class="flex items-start">
                     <input id="${item[type]}" type="checkbox" checked value="${item[type]}" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2" />
-                    <label for="${item[type]}" class="ml-2 text-sm font-medium">${item[type]}</label>
+                    <label for="${item[type]}" class="ml-2 text-xs md:text-sm font-medium">${item[type]}</label>
                   </div>
                 `).join('')}
               </div>
