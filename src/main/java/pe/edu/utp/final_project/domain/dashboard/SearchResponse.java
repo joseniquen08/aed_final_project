@@ -3,6 +3,7 @@ package pe.edu.utp.final_project.domain.dashboard;
 public class SearchResponse {
   private String[] headers;
   private SearchItem[] results;
+  private SearchItem[] resultsTotal;
   private String value;
   private String type;
   private int total;
@@ -23,6 +24,14 @@ public class SearchResponse {
 
   public void setResults(SearchItem[] results) {
     this.results = results;
+  }
+
+  public SearchItem[] getResultsTotal() {
+    return resultsTotal;
+  }
+
+  public void setResultsTotal(SearchItem[] resultsTotal) {
+    this.resultsTotal = resultsTotal;
   }
 
   public String getValue() {

@@ -200,11 +200,14 @@
   </section>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
   <script>
+    let filters = [];
 
     const buscar = () => {
       if ($("#query").val() !== "" && $("#type").val() !== "") {
         const value = $("#query").val();
         const type = $("#type").val();
+
+        filters.splice(0, filters.length);
 
         $.ajax({
           type: "POST",
@@ -236,11 +239,11 @@
           value,
           type,
           page,
-          filters: [],
+          filters,
         }),
         dataType: "json",
         success: function (response) {
-          renderResponse(response);
+          renderResponse(response, false);
         },
         error: function (e) {
           console.log(e);
@@ -248,32 +251,58 @@
       });
     };
 
-    const renderResponse = (response) => {
-      const { headers, page, pages, results, total, value, type } = response;
-      console.log("🚀 ~ file: buscar.html:251 ~ renderResponse ~ response:", response);
+    const filtrar = (typeSelected, valueSelected, type, value) => {
+      if (!$(`#${typeof valueSelected === 'string' ? valueSelected.replace(/\s/g, '').replaceAll(':', '') : valueSelected}`).is(':checked')) {
+        filters.push({ header: typeSelected, value: valueSelected });
+      } else {
+        filters = filters.filter((filter) => parseInt(filter.header) !== typeSelected && filter.value !== valueSelected);
+      }
+      console.log(filters);
+
+      $.ajax({
+        type: "POST",
+        url: "/api/paginar",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+          value,
+          type,
+          page: 1,
+          filters,
+        }),
+        dataType: "json",
+        success: function (response) {
+          renderResponse(response, false);
+        },
+        error: function (e) {
+          console.log(e);
+        },
+      });
+    };
+
+    const renderResponse = (response, updateFilters = true) => {
+      const { headers, page, pages, results, resultsTotal, total, value, type } = response;
 
       $("#searchValue").html(`Valor buscado: <span class="text-stone-100">${value}</span>`);
 
-      ["ruc_entidad", "entidad", "ruc_proveedor", "proveedor", "fecha_formalizacion", "acuerdo_marco", "tipo_procedimiento", "estado_orden_electronica"].forEach((type) => {
-        $(`#${type}`).html(`
-          ${results.length > 0 ? `
-              <div class="flex flex-col space-y-4">
-                ${results.filter((item, index, self) => {
-          // TODO hacer un onclick para filtrar por cada item, algo asi filterBy(type, item[type]), primero el tipo y luego el valor
-          return self.findIndex((t) => t[type] === item[type]) === index;
-        }).map(item => `
-                  <div class="flex items-start">
-                    <input id="${item[type]}" type="checkbox" checked value="${item[type]}" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2" />
-                    <label for="${item[type]}" class="ml-2 text-xs md:text-sm font-medium">${item[type]}</label>
-                  </div>
-                `).join('')}
-              </div>
-            `
-            : `
-              <p class="text-center text-stone-500">No hay resultados para filtrar</p>
-            `}
-        `);
-      });
+      if (updateFilters) {
+        [{ text: "ruc_entidad", index: 3 }, { text: "entidad", index: 4 }, { text: "ruc_proveedor", index: 1 }, { text: "proveedor", index: 2 }, { text: "fecha_formalizacion", index: 10 }, "acuerdo_marco", { text: "tipo_procedimiento", index: 5 }, { text: "estado_orden_electronica", index: 7 }].forEach((typeStr) => {
+          $(`#${typeStr.text}`).html(`
+            ${resultsTotal.length > 0 ? `
+                <div class="flex flex-col space-y-4">
+                  ${resultsTotal.filter((item, index, self) => self.findIndex((t) => t[typeStr.text] === item[typeStr.text]) === index).map(item => `
+                    <div class="flex items-start">
+                      <input id="${typeof item[typeStr.text] === 'string' ? item[typeStr.text].replace(/\s/g, '').replaceAll(':', '') : item[typeStr.text]}" type="checkbox" onclick="filtrar('${typeStr.index}', '${item[typeStr.text]}', ${type}, '${value}')" checked value="${item[typeStr.text]}" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2" />
+                      <label for="${item[typeStr.text]}" class="ml-2 text-xs md:text-sm font-medium">${item[typeStr.text]}</label>
+                    </div>
+                  `).join('')}
+                </div>
+              `
+              : `
+                <p class="text-center text-stone-500">No hay resultados para filtrar</p>
+              `}
+          `);
+        });
+      }
 
       const tableContainer = `
         <table class="w-full text-xs text-left text-stone-300">

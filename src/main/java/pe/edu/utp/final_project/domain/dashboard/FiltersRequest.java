@@ -2,7 +2,7 @@ package pe.edu.utp.final_project.domain.dashboard;
 
 public class FiltersRequest {
   private String value;
-  private String header;
+  private int header;
 
   public String getValue() {
     return value;
@@ -12,11 +12,11 @@ public class FiltersRequest {
     this.value = value;
   }
 
-  public String getHeader() {
+  public int getHeader() {
     return header;
   }
 
-  public void setHeader(String header) {
+  public void setHeader(int header) {
     this.header = header;
   }
 }

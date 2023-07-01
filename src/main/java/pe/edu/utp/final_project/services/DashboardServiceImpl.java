@@ -34,18 +34,31 @@ public class DashboardServiceImpl implements IDashboardService {
         SearchResponse response = new SearchResponse();
         LinkedList<SearchItem> list = new LinkedList<>();
 
+        System.out.println("--------");
+        for (int i = 0; i < filters.length; i++) {
+          System.out.println(filters[i].getHeader() + " " + filters[i].getValue());
+        }
+
         while ((record = openCSVReader.readNext()) != null) {
           if (cont == 0) {
             for (int i = 0; i < 19; i++) {
               arrayHeader[i] = record[i];
             }
           } else {
+            boolean hasFilter = false;
             if (record[Integer.parseInt(type)].equals(value)) {
-              SearchItem item = new SearchItem(record[0], record[1], record[2], record[3], record[4], record[5],
-                  record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13],
-                  record[14],
-                  record[15], record[16], record[17], record[18]);
-              list.addToEnd(item);
+              for (int i = 0; i < filters.length; i++) {
+                if (record[filters[i].getHeader()].equals(filters[i].getValue())) {
+                  hasFilter = true;
+                }
+              }
+              if (!hasFilter) {
+                SearchItem item = new SearchItem(record[0], record[1], record[2], record[3], record[4], record[5],
+                    record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13],
+                    record[14],
+                    record[15], record[16], record[17], record[18]);
+                list.addToEnd(item);
+              }
             }
           }
           cont++;
@@ -57,8 +70,10 @@ public class DashboardServiceImpl implements IDashboardService {
         int length = totalPages == page && list.size() % 5 != 0 ? list.size() % 5 : 5;
 
         SearchItem[] items = new SearchItem[list.size() != 0 ? length : 0];
+        SearchItem[] itemsTotal = new SearchItem[list.size()];
 
         Node<SearchItem> currentNode = list.header;
+        Node<SearchItem> currentNodeTotal = list.header;
 
         int auxCont = 0;
 
@@ -70,12 +85,18 @@ public class DashboardServiceImpl implements IDashboardService {
           currentNode = currentNode.getNext();
         }
 
+        for (int i = 0; i < list.size(); i++) {
+          itemsTotal[i] = currentNodeTotal.getValue();
+          currentNodeTotal = currentNodeTotal.getNext();
+        }
+
         for (int i = 0; i < pages.length; i++) {
           pages[i] = i + 1;
         }
 
         response.setHeaders(arrayHeader);
         response.setResults(items);
+        response.setResultsTotal(itemsTotal);
         response.setValue(value);
         response.setType(type);
         response.setTotal(list.size());
