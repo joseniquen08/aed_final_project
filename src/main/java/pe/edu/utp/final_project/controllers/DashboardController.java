@@ -1,22 +1,14 @@
 package pe.edu.utp.final_project.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import pe.edu.utp.final_project.domain.dashboard.FiltersRequest;
-import pe.edu.utp.final_project.services.DashboardServiceImpl;
 
 @Controller
 public class DashboardController {
-
-  @Autowired
-  private DashboardServiceImpl dashboardServiceImpl;
 
   @GetMapping("/")
   public String home(Model model, HttpServletRequest request) {
@@ -31,14 +23,10 @@ public class DashboardController {
     return getUsernameFromCookies(request, model, "buscar");
   }
 
-  @PostMapping("/buscar")
-  public String buscarAction(@RequestParam("query") String query, @RequestParam("type") String type,
-      HttpServletRequest request, Model model) {
-    model.addAttribute("module", "buscar");
-    model.addAttribute("results", dashboardServiceImpl.searchFisrt(query, type, 1, new FiltersRequest[0]));
-    model.addAttribute("query", query);
-    model.addAttribute("type", type);
-    return getUsernameFromCookies(request, model, "buscar");
+  @GetMapping("/estadisticas")
+  public String estadisticas(Model model, HttpServletRequest request) {
+    model.addAttribute("module", "estadisticas");
+    return getUsernameFromCookies(request, model, "estadisticas");
   }
 
   public String getUsernameFromCookies(HttpServletRequest request, Model model, String successView) {

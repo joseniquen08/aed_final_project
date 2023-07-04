@@ -82,9 +82,25 @@
             <div id="responseContainer" class="hidden">
               <div id="optionsContainer" class="px-6 py-3 text-sm flex items-center justify-between">
                 <p id="searchValue" class="text-stone-400"></p>
-                <div>
+                <div class="flex space-x-4">
+                  <button id="dropdownBtnExport" type="button"
+                    class="border-2 border-green-500 text-stone-100 rounded-lg px-4 py-1.5 hover:bg-green-700/20"
+                    data-dropdown-toggle="dropdownExport" data-dropdown-placement="bottom-end">Exportar</button>
+                  <div id="dropdownExport"
+                    class="z-10 hidden bg-stone-900 rounded-lg shadow-lg shadow-stone-900/50 border border-stone-700">
+                    <ul class="py-2" aria-labelledby="dropdownBtnExport">
+                      <li>
+                        <button type="button" id="btnExportPDF" class="block px-8 py-2 hover:bg-stone-800">a
+                          PDF</button>
+                      </li>
+                      <li>
+                        <button type="button" id="btnExportCSV" class="block px-8 py-2 hover:bg-stone-800">a
+                          CSV</button>
+                      </li>
+                    </ul>
+                  </div>
                   <button data-modal-target="filterModal" data-modal-toggle="filterModal"
-                    class="inline-flex items-center text-stone-100 border border-stone-300 focus:outline-none hover:bg-stone-700 focus:ring-0 font-medium rounded-lg px-4 py-1.5"
+                    class="inline-flex items-center text-stone-100 border-2 border-stone-300 focus:outline-none hover:bg-stone-700/70 focus:ring-0 font-medium rounded-lg px-4 py-1.5"
                     type="button">
                     Filtrar
                   </button>
@@ -257,11 +273,10 @@
       } else {
         filters = filters.filter((filter) => parseInt(filter.header) !== typeSelected && filter.value !== valueSelected);
       }
-      console.log(filters);
 
       $.ajax({
         type: "POST",
-        url: "/api/paginar",
+        url: "/api/filtrar",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify({
           value,
@@ -275,6 +290,28 @@
         },
         error: function (e) {
           console.log(e);
+        },
+      });
+    };
+
+    const exportarPDF = (results) => {
+      $.ajax({
+        type: "POST",
+        url: "/api/exportar/pdf",
+        xhrFields: {
+          responseType: "blob",
+        },
+        contentType: "application/json",
+        data: JSON.stringify({
+          results,
+        }),
+        success: function (data) {
+          const blob = new Blob([data], { type: "application/pdf" });
+          const url = URL.createObjectURL(blob);
+          window.open(url, "_blank");
+        },
+        error: function (e) {
+          console.log("error:", e);
         },
       });
     };
@@ -303,6 +340,11 @@
           `);
         });
       }
+
+      $("#btnExportPDF").on("click", function () {
+        exportarPDF(resultsTotal);
+      });
+      // $("#btnExportCSV").attr("onclick", `exportarCSV(${resultsTotal})`);
 
       const tableContainer = `
         <table class="w-full text-xs text-left text-stone-300">

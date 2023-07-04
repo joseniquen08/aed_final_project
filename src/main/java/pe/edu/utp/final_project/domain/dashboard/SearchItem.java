@@ -1,49 +1,201 @@
 package pe.edu.utp.final_project.domain.dashboard;
 
 public class SearchItem {
-  public String fecha_proceso;
-  public String ruc_proveedor;
+  public String fechaProceso;
+  public String rucProveedor;
   public String proveedor;
-  public String ruc_entidad;
+  public String rucEntidad;
   public String entidad;
-  public String tipo_procedimiento;
-  public String orden_electronica;
-  public String orden_electronica_generada;
-  public String estado_orden_electronica;
-  public String documento_estado_ocam;
-  public String fecha_formalizacion;
-  public String fecha_ultimo_estado;
-  public String sub_total;
+  public String tipoProcedimiento;
+  public String ordenElectronica;
+  public String ordenElectronicaGenerada;
+  public String estadoOrdenElectronica;
+  public String documentoEstadoOcam;
+  public String fechaFormalizacion;
+  public String fechaUltimoEstado;
+  public String subTotal;
   public String igv;
   public String total;
-  public String orden_digitalizada;
-  public String descripcion_estado;
-  public String descripcion_cesion_derechos;
-  public String acuerdo_marco;
+  public String ordenDigitalizada;
+  public String descripcionEstado;
+  public String descripcionCesionDerechos;
+  public String acuerdoMarco;
 
-  public SearchItem(String fecha_proceso, String ruc_proveedor, String proveedor, String ruc_entidad, String entidad,
-      String tipo_procedimiento, String orden_electronica, String orden_electronica_generada,
-      String estado_orden_electronica, String documento_estado_ocam, String fecha_formalizacion,
-      String fecha_ultimo_estado, String sub_total, String igv, String total, String orden_digitalizada,
-      String descripcion_estado, String descripcion_cesion_derechos, String acuerdo_marco) {
-    this.fecha_proceso = fecha_proceso;
-    this.ruc_proveedor = ruc_proveedor;
+  public SearchItem(String fechaProceso, String rucProveedor, String proveedor, String rucEntidad, String entidad,
+      String tipoProcedimiento, String ordenElectronica, String ordenElectronicaGenerada,
+      String estadoOrdenElectronica, String documentoEstadoOcam, String fechaFormalizacion,
+      String fechaUltimoEstado, String subTotal, String igv, String total, String ordenDigitalizada,
+      String descripcionEstado, String descripcionCesionDerechos, String acuerdoMarco) {
+    this.fechaProceso = fechaProceso;
+    this.rucProveedor = rucProveedor;
     this.proveedor = proveedor;
-    this.ruc_entidad = ruc_entidad;
+    this.rucEntidad = rucEntidad;
     this.entidad = entidad;
-    this.tipo_procedimiento = tipo_procedimiento;
-    this.orden_electronica = orden_electronica;
-    this.orden_electronica_generada = orden_electronica_generada;
-    this.estado_orden_electronica = estado_orden_electronica;
-    this.documento_estado_ocam = documento_estado_ocam;
-    this.fecha_formalizacion = fecha_formalizacion;
-    this.fecha_ultimo_estado = fecha_ultimo_estado;
-    this.sub_total = sub_total;
+    this.tipoProcedimiento = tipoProcedimiento;
+    this.ordenElectronica = ordenElectronica;
+    this.ordenElectronicaGenerada = ordenElectronicaGenerada;
+    this.estadoOrdenElectronica = estadoOrdenElectronica;
+    this.documentoEstadoOcam = documentoEstadoOcam;
+    this.fechaFormalizacion = fechaFormalizacion;
+    this.fechaUltimoEstado = fechaUltimoEstado;
+    this.subTotal = subTotal;
     this.igv = igv;
     this.total = total;
-    this.orden_digitalizada = orden_digitalizada;
-    this.descripcion_estado = descripcion_estado;
-    this.descripcion_cesion_derechos = descripcion_cesion_derechos;
-    this.acuerdo_marco = acuerdo_marco;
+    this.ordenDigitalizada = ordenDigitalizada;
+    this.descripcionEstado = descripcionEstado;
+    this.descripcionCesionDerechos = descripcionCesionDerechos;
+    this.acuerdoMarco = acuerdoMarco;
+  }
+
+  public String getFechaProceso() {
+    return fechaProceso;
+  }
+
+  public void setFechaProceso(String fechaProceso) {
+    this.fechaProceso = fechaProceso;
+  }
+
+  public String getRucProveedor() {
+    return rucProveedor;
+  }
+
+  public void setRucProveedor(String rucProveedor) {
+    this.rucProveedor = rucProveedor;
+  }
+
+  public String getProveedor() {
+    return proveedor;
+  }
+
+  public void setProveedor(String proveedor) {
+    this.proveedor = proveedor;
+  }
+
+  public String getRucEntidad() {
+    return rucEntidad;
+  }
+
+  public void setRucEntidad(String rucEntidad) {
+    this.rucEntidad = rucEntidad;
+  }
+
+  public String getEntidad() {
+    return entidad;
+  }
+
+  public void setEntidad(String entidad) {
+    this.entidad = entidad;
+  }
+
+  public String getTipoProcedimiento() {
+    return tipoProcedimiento;
+  }
+
+  public void setTipoProcedimiento(String tipoProcedimiento) {
+    this.tipoProcedimiento = tipoProcedimiento;
+  }
+
+  public String getOrdenElectronica() {
+    return ordenElectronica;
+  }
+
+  public void setOrdenElectronica(String ordenElectronica) {
+    this.ordenElectronica = ordenElectronica;
+  }
+
+  public String getOrdenElectronicaGenerada() {
+    return ordenElectronicaGenerada;
+  }
+
+  public void setOrdenElectronicaGenerada(String ordenElectronicaGenerada) {
+    this.ordenElectronicaGenerada = ordenElectronicaGenerada;
+  }
+
+  public String getEstadoOrdenElectronica() {
+    return estadoOrdenElectronica;
+  }
+
+  public void setEstadoOrdenElectronica(String estadoOrdenElectronica) {
+    this.estadoOrdenElectronica = estadoOrdenElectronica;
+  }
+
+  public String getDocumentoEstadoOcam() {
+    return documentoEstadoOcam;
+  }
+
+  public void setDocumentoEstadoOcam(String documentoEstadoOcam) {
+    this.documentoEstadoOcam = documentoEstadoOcam;
+  }
+
+  public String getFechaFormalizacion() {
+    return fechaFormalizacion;
+  }
+
+  public void setFechaFormalizacion(String fechaFormalizacion) {
+    this.fechaFormalizacion = fechaFormalizacion;
+  }
+
+  public String getFechaUltimoEstado() {
+    return fechaUltimoEstado;
+  }
+
+  public void setFechaUltimoEstado(String fechaUltimoEstado) {
+    this.fechaUltimoEstado = fechaUltimoEstado;
+  }
+
+  public String getSubTotal() {
+    return subTotal;
+  }
+
+  public void setSubTotal(String subTotal) {
+    this.subTotal = subTotal;
+  }
+
+  public String getIgv() {
+    return igv;
+  }
+
+  public void setIgv(String igv) {
+    this.igv = igv;
+  }
+
+  public String getTotal() {
+    return total;
+  }
+
+  public void setTotal(String total) {
+    this.total = total;
+  }
+
+  public String getOrdenDigitalizada() {
+    return ordenDigitalizada;
+  }
+
+  public void setOrdenDigitalizada(String ordenDigitalizada) {
+    this.ordenDigitalizada = ordenDigitalizada;
+  }
+
+  public String getDescripcionEstado() {
+    return descripcionEstado;
+  }
+
+  public void setDescripcionEstado(String descripcionEstado) {
+    this.descripcionEstado = descripcionEstado;
+  }
+
+  public String getDescripcionCesionDerechos() {
+    return descripcionCesionDerechos;
+  }
+
+  public void setDescripcionCesionDerechos(String descripcionCesionDerechos) {
+    this.descripcionCesionDerechos = descripcionCesionDerechos;
+  }
+
+  public String getAcuerdoMarco() {
+    return acuerdoMarco;
+  }
+
+  public void setAcuerdoMarco(String acuerdoMarco) {
+    this.acuerdoMarco = acuerdoMarco;
   }
 }

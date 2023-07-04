@@ -1,15 +1,26 @@
 package pe.edu.utp.final_project.services;
 
+import java.awt.Color;
 import java.io.FileReader;
 import java.io.IOException;
 
 import org.springframework.stereotype.Service;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 
+import jakarta.servlet.http.HttpServletResponse;
 import pe.edu.utp.final_project.classes.LinkedList;
 import pe.edu.utp.final_project.classes.Node;
 import pe.edu.utp.final_project.domain.dashboard.FiltersRequest;
@@ -33,11 +44,6 @@ public class DashboardServiceImpl implements IDashboardService {
         String[] arrayHeader = new String[19];
         SearchResponse response = new SearchResponse();
         LinkedList<SearchItem> list = new LinkedList<>();
-
-        System.out.println("--------");
-        for (int i = 0; i < filters.length; i++) {
-          System.out.println(filters[i].getHeader() + " " + filters[i].getValue());
-        }
 
         while ((record = openCSVReader.readNext()) != null) {
           if (cont == 0) {
@@ -111,5 +117,121 @@ public class DashboardServiceImpl implements IDashboardService {
       e.printStackTrace();
     }
     return new SearchResponse();
+  }
+
+  @Override
+  public void exportPDF(SearchItem[] results, HttpServletResponse response)
+      throws DocumentException, IOException {
+    Document document = new Document(PageSize.A4.rotate(), 10, 10, 10, 10);
+    PdfWriter.getInstance(document, response.getOutputStream());
+    document.open();
+
+    Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+    fontTitle.setSize(16);
+
+    Paragraph paragraph = new Paragraph("Resultados de la búsqueda");
+    paragraph.setAlignment(Paragraph.ALIGN_CENTER);
+
+    document.add(paragraph);
+
+    PdfPTable table = new PdfPTable(19);
+    table.setWidthPercentage(100f);
+    table.setWidths(new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
+    table.setSpacingBefore(10);
+
+    PdfPCell cell = new PdfPCell();
+    cell.setBackgroundColor(Color.WHITE);
+    cell.setPadding(3);
+
+    Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+    fontHeader.setColor(Color.BLACK);
+    fontHeader.setSize(8);
+
+    cell.setPhrase(new Paragraph("FECHA_PROCESO", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("RUC_PROVEEDOR", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("PROVEEDOR", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("RUC_ENTIDAD", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("ENTIDAD", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("TIPO_PROCEDIMIENTO", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("ORDEN_ELECTRÓNICA", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("ORDEN_ELECTRÓNICA_GENERADA", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("ESTADO_ORDEN_ELECTRÓNICA", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("DOCUMENTO_ESTADO_OCAM", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("FECHA_FORMALIZACIÓN", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("FECHA_ÚLTIMO_ESTADO", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("SUB_TOTAL", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("IGV", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("TOTAL", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("ORDEN_DIGITALIZADA", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("DESCRIPCIÓN_ESTADO", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("DESCRIPCIÓN_CESIÓN_DERECHOS", fontHeader));
+    table.addCell(cell);
+    cell.setPhrase(new Paragraph("ACUERDO_MARCO", fontHeader));
+    table.addCell(cell);
+
+    Font fontBody = FontFactory.getFont(FontFactory.HELVETICA);
+    fontBody.setColor(Color.BLACK);
+    fontBody.setSize(8);
+
+    for (SearchItem item : results) {
+      cell.setPhrase(new Paragraph(item.getFechaProceso(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getRucProveedor(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getProveedor(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getRucEntidad(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getEntidad(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getTipoProcedimiento(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getOrdenElectronica(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getOrdenElectronicaGenerada(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getEstadoOrdenElectronica(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getDocumentoEstadoOcam(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getFechaFormalizacion(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getFechaUltimoEstado(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getSubTotal(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getIgv(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getTotal(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getOrdenDigitalizada(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getDescripcionEstado(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getDescripcionCesionDerechos(), fontBody));
+      table.addCell(cell);
+      cell.setPhrase(new Paragraph(item.getAcuerdoMarco(), fontBody));
+      table.addCell(cell);
+    }
+
+    document.add(table);
+    document.close();
   }
 }
