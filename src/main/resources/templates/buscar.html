@@ -93,10 +93,6 @@
                         <button type="button" id="btnExportPDF" class="block px-8 py-2 hover:bg-stone-800">a
                           PDF</button>
                       </li>
-                      <li>
-                        <button type="button" id="btnExportCSV" class="block px-8 py-2 hover:bg-stone-800">a
-                          CSV</button>
-                      </li>
                     </ul>
                   </div>
                   <button data-modal-target="filterModal" data-modal-toggle="filterModal"
@@ -341,10 +337,10 @@
         });
       }
 
+      $("#btnExportPDF").off("click");
       $("#btnExportPDF").on("click", function () {
         exportarPDF(resultsTotal);
       });
-      // $("#btnExportCSV").attr("onclick", `exportarCSV(${resultsTotal})`);
 
       const tableContainer = `
         <table class="w-full text-xs text-left text-stone-300">

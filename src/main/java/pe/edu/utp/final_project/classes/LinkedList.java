@@ -1,5 +1,7 @@
 package pe.edu.utp.final_project.classes;
 
+import pe.edu.utp.final_project.domain.dashboard.SearchItem;
+
 public class LinkedList<E> {
   public Node<E> header;
 
@@ -69,21 +71,36 @@ public class LinkedList<E> {
     }
   }
 
-  public void sort() {
+  public Node<E> getNodeAt(int index) {
+    if (index < 0 || index >= this.size()) {
+      return null;
+    }
     Node<E> currentNode = this.header;
-    Node<E> nextNode;
-    E auxObject;
-    while (currentNode.getNext() != null) {
-      nextNode = currentNode.getNext();
-      while (nextNode != null) {
-        if (Integer.parseInt((String) currentNode.getValue()) > Integer.parseInt((String) nextNode.getValue())) {
-          auxObject = nextNode.getValue();
-          nextNode.setValue(currentNode.getValue());
-          currentNode.setValue(auxObject);
-        }
-        nextNode = nextNode.getNext();
-      }
+    int count = 0;
+    while (count < index) {
       currentNode = currentNode.getNext();
+      count++;
+    }
+    return currentNode;
+  }
+
+  public void sortByRUCProveedorAndRUCEntidad() {
+    int size = this.size();
+    int gap = size / 2;
+
+    while (gap > 0) {
+      for (int i = gap; i < size; i++) {
+        Node<E> currentNode = this.getNodeAt(i);
+        int j = i;
+
+        while (j >= gap
+            && Long.parseLong(((SearchItem) this.getNodeAt(j - gap).getValue()).getRucProveedor()) > Long
+                .parseLong(((SearchItem) currentNode.getValue()).getRucProveedor())) {
+          this.getNodeAt(j).setValue(this.getNodeAt(j - gap).getValue());
+          j -= gap;
+        }
+      }
+      gap /= 2;
     }
   }
 

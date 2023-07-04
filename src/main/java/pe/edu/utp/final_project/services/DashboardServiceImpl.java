@@ -59,8 +59,10 @@ public class DashboardServiceImpl implements IDashboardService {
                 }
               }
               if (!hasFilter) {
-                SearchItem item = new SearchItem(record[0], record[1], record[2], record[3], record[4], record[5],
-                    record[6], record[7], record[8], record[9], record[10], record[11], record[12], record[13],
+                SearchItem item = new SearchItem(record[0], record[1], record[2], record[3],
+                    record[4], record[5],
+                    record[6], record[7], record[8], record[9], record[10], record[11],
+                    record[12], record[13],
                     record[14],
                     record[15], record[16], record[17], record[18]);
                 list.addToEnd(item);
