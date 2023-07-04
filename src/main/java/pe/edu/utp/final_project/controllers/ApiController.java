@@ -29,19 +29,19 @@ public class ApiController {
 
   @PostMapping("/buscar")
   public @ResponseBody SearchResponse buscar(@RequestBody SearchRequestBody searchRequestBody) {
-    return dashboardServiceImpl.searchFisrt(searchRequestBody.getValue(), searchRequestBody.getType(),
+    return dashboardServiceImpl.search(searchRequestBody.getValue(), searchRequestBody.getType(),
         searchRequestBody.getPage(), searchRequestBody.getFilters());
   }
 
   @PostMapping("/paginar")
   public @ResponseBody SearchResponse paginar(@RequestBody SearchRequestBody searchRequestBody) {
-    return dashboardServiceImpl.searchFisrt(searchRequestBody.getValue(), searchRequestBody.getType(),
+    return dashboardServiceImpl.search(searchRequestBody.getValue(), searchRequestBody.getType(),
         searchRequestBody.getPage(), searchRequestBody.getFilters());
   }
 
   @PostMapping("/filtrar")
   public @ResponseBody SearchResponse filtrar(@RequestBody SearchRequestBody searchRequestBody) {
-    return dashboardServiceImpl.searchFisrt(searchRequestBody.getValue(), searchRequestBody.getType(),
+    return dashboardServiceImpl.search(searchRequestBody.getValue(), searchRequestBody.getType(),
         searchRequestBody.getPage(), searchRequestBody.getFilters());
   }
 

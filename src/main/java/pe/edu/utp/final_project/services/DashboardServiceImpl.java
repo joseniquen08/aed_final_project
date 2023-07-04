@@ -31,7 +31,7 @@ import pe.edu.utp.final_project.domain.dashboard.SearchResponse;
 public class DashboardServiceImpl implements IDashboardService {
 
   @Override
-  public SearchResponse searchFisrt(String value, String type, int page, FiltersRequest[] filters) {
+  public SearchResponse search(String value, String type, int page, FiltersRequest[] filters) {
     try {
       String filePath = "./src/main/resources/files/ReportePCBienes202201.csv";
       FileReader fileReader = new FileReader(filePath);

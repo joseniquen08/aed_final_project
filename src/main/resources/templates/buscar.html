@@ -78,9 +78,9 @@
               </button>
             </div>
           </div>
-          <div class="px-0 md:px-4 py-3">
+          <div class="px-0 py-3">
             <div id="responseContainer" class="hidden">
-              <div id="optionsContainer" class="px-6 py-3 text-sm flex items-center justify-between">
+              <div id="optionsContainer" class="px-2 py-3 text-sm flex items-center justify-between">
                 <p id="searchValue" class="text-stone-400"></p>
                 <div class="flex space-x-4">
                   <button id="dropdownBtnExport" type="button"
@@ -123,8 +123,8 @@
                               class="w-48 font-medium text-xs md:text-sm text-left border border-stone-300 rounded-lg overflow-hidden py-2"
                               id="filterTabs" data-tabs-toggle="#filterTabsContent" role="tablist">
                               <li class="w-full" role="presentation">
-                                <button class="inline-block w-full px-4 py-2" id="ruc_entidad-tab"
-                                  data-tabs-target="#ruc_entidad" type="button" role="tab" aria-controls="ruc_entidad"
+                                <button class="inline-block w-full px-4 py-2" id="rucEntidad-tab"
+                                  data-tabs-target="#rucEntidad" type="button" role="tab" aria-controls="rucEntidad"
                                   aria-selected="false">RUC Entidad</button>
                               </li>
                               <li class="w-full" role="presentation">
@@ -136,8 +136,8 @@
                               <li class="w-full" role="presentation">
                                 <button
                                   class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
-                                  id="ruc_proveedor-tab" data-tabs-target="#ruc_proveedor" type="button" role="tab"
-                                  aria-controls="ruc_proveedor" aria-selected="false">RUC Proveedor</button>
+                                  id="rucProveedor-tab" data-tabs-target="#rucProveedor" type="button" role="tab"
+                                  aria-controls="rucProveedor" aria-selected="false">RUC Proveedor</button>
                               </li>
                               <li class="w-full" role="presentation">
                                 <button
@@ -148,50 +148,50 @@
                               <li class="w-full" role="presentation">
                                 <button
                                   class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
-                                  id="fecha_formalizacion-tab" data-tabs-target="#fecha_formalizacion" type="button"
-                                  role="tab" aria-controls="fecha_formalizacion" aria-selected="false">Fecha de
+                                  id="fechaFormalizacion-tab" data-tabs-target="#fechaFormalizacion" type="button"
+                                  role="tab" aria-controls="fechaFormalizacion" aria-selected="false">Fecha de
                                   formalización</button>
                               </li>
                               <li class="w-full" role="presentation">
                                 <button
                                   class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
-                                  id="acuerdo_marco-tab" data-tabs-target="#acuerdo_marco" type="button" role="tab"
-                                  aria-controls="acuerdo_marco" aria-selected="false">Acuerdo de marco</button>
+                                  id="acuerdoMarco-tab" data-tabs-target="#acuerdoMarco" type="button" role="tab"
+                                  aria-controls="acuerdoMarco" aria-selected="false">Acuerdo de marco</button>
                               </li>
                               <li class="w-full" role="presentation">
                                 <button
                                   class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
-                                  id="tipo_procedimiento-tab" data-tabs-target="#tipo_procedimiento" type="button"
-                                  role="tab" aria-controls="tipo_procedimiento" aria-selected="false">Tipo de
+                                  id="tipoProcedimiento-tab" data-tabs-target="#tipoProcedimiento" type="button"
+                                  role="tab" aria-controls="tipoProcedimiento" aria-selected="false">Tipo de
                                   procedimiento</button>
                               </li>
                               <li class="w-full" role="presentation">
                                 <button
                                   class="inline-block w-full px-4 py-2 border-transparent hover:text-gray-600 hover:border-gray-300"
-                                  id="estado_orden_electronica-tab" data-tabs-target="#estado_orden_electronica"
-                                  type="button" role="tab" aria-controls="estado_orden_electronica"
+                                  id="estadoOrdenElectronica-tab" data-tabs-target="#estadoOrdenElectronica"
+                                  type="button" role="tab" aria-controls="estadoOrdenElectronica"
                                   aria-selected="false">Estado de orden electrónica</button>
                               </li>
                             </ul>
                           </div>
                           <div id="filterTabsContent" class="w-full h-96">
                             <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
-                              id="ruc_entidad" role="tabpanel" aria-labelledby="ruc_entidad-tab"></div>
+                              id="rucEntidad" role="tabpanel" aria-labelledby="rucEntidad-tab"></div>
                             <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
                               id="entidad" role="tabpanel" aria-labelledby="entidad-tab"></div>
                             <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
-                              id="ruc_proveedor" role="tabpanel" aria-labelledby="ruc_proveedor-tab"></div>
+                              id="rucProveedor" role="tabpanel" aria-labelledby="rucProveedor-tab"></div>
                             <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
                               id="proveedor" role="tabpanel" aria-labelledby="proveedor-tab"></div>
                             <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
-                              id="fecha_formalizacion" role="tabpanel" aria-labelledby="fecha_formalizacion-tab"></div>
+                              id="fechaFormalizacion" role="tabpanel" aria-labelledby="fechaFormalizacion-tab"></div>
                             <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
-                              id="acuerdo_marco" role="tabpanel" aria-labelledby="acuerdo_marco-tab"></div>
+                              id="acuerdoMarco" role="tabpanel" aria-labelledby="acuerdoMarco-tab"></div>
                             <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
-                              id="tipo_procedimiento" role="tabpanel" aria-labelledby="tipo_procedimiento-tab"></div>
+                              id="tipoProcedimiento" role="tabpanel" aria-labelledby="tipoProcedimiento-tab"></div>
                             <div class="hidden w-full h-full overflow-y-auto p-4 rounded-lg border border-stone-300"
-                              id="estado_orden_electronica" role="tabpanel"
-                              aria-labelledby="estado_orden_electronica-tab"></div>
+                              id="estadoOrdenElectronica" role="tabpanel" aria-labelledby="estadoOrdenElectronica-tab">
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -258,7 +258,7 @@
           renderResponse(response, false);
         },
         error: function (e) {
-          console.log(e);
+          console.log("error:", e);
         },
       });
     };
@@ -285,7 +285,7 @@
           renderResponse(response, false);
         },
         error: function (e) {
-          console.log(e);
+          console.log("error:", e);
         },
       });
     };
@@ -318,13 +318,13 @@
       $("#searchValue").html(`Valor buscado: <span class="text-stone-100">${value}</span>`);
 
       if (updateFilters) {
-        [{ text: "ruc_entidad", index: 3 }, { text: "entidad", index: 4 }, { text: "ruc_proveedor", index: 1 }, { text: "proveedor", index: 2 }, { text: "fecha_formalizacion", index: 10 }, "acuerdo_marco", { text: "tipo_procedimiento", index: 5 }, { text: "estado_orden_electronica", index: 7 }].forEach((typeStr) => {
+        [{ text: "rucEntidad", index: 3 }, { text: "entidad", index: 4 }, { text: "rucProveedor", index: 1 }, { text: "proveedor", index: 2 }, { text: "fechaFormalizacion", index: 10 }, "acuerdoMarco", { text: "tipoProcedimiento", index: 5 }, { text: "estadoOrdenElectronica", index: 7 }].forEach((typeStr) => {
           $(`#${typeStr.text}`).html(`
             ${resultsTotal.length > 0 ? `
                 <div class="flex flex-col space-y-4">
                   ${resultsTotal.filter((item, index, self) => self.findIndex((t) => t[typeStr.text] === item[typeStr.text]) === index).map(item => `
                     <div class="flex items-start">
-                      <input id="${typeof item[typeStr.text] === 'string' ? item[typeStr.text].replace(/\s/g, '').replaceAll(':', '') : item[typeStr.text]}" type="checkbox" onclick="filtrar('${typeStr.index}', '${item[typeStr.text]}', ${type}, '${value}')" checked value="${item[typeStr.text]}" class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2" />
+                      <input id="${typeof item[typeStr.text] === 'string' ? item[typeStr.text].replace(/\s/g, '').replaceAll(':', '') : item[typeStr.text]}" type="checkbox" onclick="filtrar('${typeStr.index}', '${item[typeStr.text]}', ${type}, '${value}')" checked value="${item[typeStr.text]}" class="w-4 h-4 mt-0.5 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2" />
                       <label for="${item[typeStr.text]}" class="ml-2 text-xs md:text-sm font-medium">${item[typeStr.text]}</label>
                     </div>
                   `).join('')}
