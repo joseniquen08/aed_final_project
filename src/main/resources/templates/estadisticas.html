@@ -51,16 +51,130 @@
     <div th:replace="~{sidebar}"></div>
     <div class="h-screen w-full overflow-hidden">
       <div th:replace="~{navbar}"></div>
-      <div class="w-full pl-2 pr-2 md:pr-4 pb-4" style="height: calc(100vh - 80px)">
+      <div class="w-full pl-2 pr-2 md:pr-4 pb-4" style="height: calc(100vh - 5rem)">
         <div class="px-6 py-6 bg-stone-800 rounded-lg h-full overflow-y-auto text-white">
-          <p>Pedro</p>
+          <div class="grid grid-cols-12 gap-4 pb-6 border-b border-stone-400">
+            <div class="col-span-12 md:col-span-9 flex items-end">
+              <select name="type" id="type" required
+                class="w-full bg-stone-800 py-1.5 px-3 border border-stone-400 rounded-lg focus:ring-green-500 focus:border-green-500">
+                <option value="" hidden>Seleccionar el tipo de estadística</option>
+                <option value="1">Compras de Entidades y Proveedores según Estado de Orden Electrónica</option>
+                <option value="2">Compras de Acuerdos Marco y Proveedores según Estado de Orden Electrónica</option>
+                <option value="3">Resultados de Acuerdos Marco por Día del Mes</option>
+              </select>
+            </div>
+            <div class="col-span-12 md:col-span-3 flex items-end">
+              <button type="button" onclick="generar()"
+                class="bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg w-full font-medium">
+                Generar estadística
+              </button>
+            </div>
+          </div>
+          <div class="px-0">
+            <div id="responseContainer" class="hidden">
+              <div id="optionsContainer" class="px-2 py-3 text-sm flex items-center justify-end">
+                <div class="flex space-x-4">
+                  <button id="dropdownBtnExport" type="button"
+                    class="border-2 border-green-500 text-stone-100 rounded-lg px-4 py-1.5 hover:bg-green-700/20"
+                    data-dropdown-toggle="dropdownExport" data-dropdown-placement="bottom-end">Exportar</button>
+                  <div id="dropdownExport"
+                    class="z-10 hidden bg-stone-900 rounded-lg shadow-lg shadow-stone-900/50 border border-stone-700">
+                    <ul class="py-2" aria-labelledby="dropdownBtnExport">
+                      <li>
+                        <button type="button" id="btnExportPDF" class="block px-8 py-2 hover:bg-stone-800">a
+                          PDF</button>
+                      </li>
+                    </ul>
+                  </div>
+                  <button data-modal-target="filterModal" data-modal-toggle="filterModal"
+                    class="inline-flex items-center text-stone-100 border-2 border-stone-300 focus:outline-none hover:bg-stone-700/70 focus:ring-0 font-medium rounded-lg px-4 py-1.5"
+                    type="button">
+                    Filtrar
+                  </button>
+                </div>
+              </div>
+              <div id="tableContainer" class="relative overflow-x-auto" style="height: calc(100vh - 17rem)"></div>
+            </div>
+            <div id="defaultContainer">
+              <p class="text-center text-stone-400 my-3">Selecciona un tipo de estadística para obtener resultados</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
   <script>
+    const generar = () => {
+      if ($('#type').val() !== "") {
+        $.ajax({
+          type: 'POST',
+          url: '/api/generar_estadistica',
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify({
+            type: $('#type').val(),
+          }),
+          dataType: "json",
+          success: function (response) {
+            renderResponse(response);
+          },
+          error: function (e) {
+            console.log("error: ", e);
+          }
+        });
+      }
+    }
 
+    const renderResponse = (response, updateFilters = true) => {
+      const { results } = response;
+
+      const tableContainer = `
+        <table class="w-full text-xs text-left text-stone-300">
+          <thead class="text-stone-100 uppercase bg-stone-900 sticky top-0">
+            <tr>
+              <th rowspan="2" colspan="1" class="px-4 py-2 overflow-hidden rounded-tl-xl border-r border-b border-stone-600">Entidades - Proveedores</th>
+              <th rowspan="1" colspan="3" class="px-4 py-2 overflow-hidden text-center border-b border-stone-600">Estado Orden Electrónica</th>
+              <th rowspan="2" colspan="1" class="px-4 py-2 overflow-hidden rounded-tr-xl border-l border-b border-stone-600">Cantidad Total de Órdenes</th>
+            </tr>
+            <tr>
+              <th rowspan="1" colspan="1" class="px-4 py-2 overflow-hidden border-r border-b border-stone-600">Aceptada</th>
+              <th rowspan="1" colspan="1" class="px-4 py-2 overflow-hidden border-b border-stone-600">Pagada</th>
+              <th rowspan="1" colspan="1" class="px-4 py-2 overflow-hidden border-l border-b border-stone-600">Resuelta</th>
+            </tr>
+          </thead>
+          ${results.length > 0 ? `
+            <tbody>
+              ${results.map((result, index) => `
+                  <tr class="bg-stone-900/90 text-stone-50 font-semibold">
+                    <td class="px-4 py-2">${result.name}</td>
+                    <td class="px-4 py-2">${result.providers.reduce((acc, curr) => acc + curr.quantityAccepted, 0)}</td>
+                    <td class="px-4 py-2">${result.providers.reduce((acc, curr) => acc + curr.quantityPaid, 0)}</td>
+                    <td class="px-4 py-2">${result.providers.reduce((acc, curr) => acc + curr.quantitySuccess, 0)}</td>
+                    <td class="px-4 py-2">${result.providers.reduce((acc, curr) => acc + (curr.quantityAccepted + curr.quantityPaid + curr.quantitySuccess), 0)}</td>
+                  </tr>
+                  ${result.providers.map((provider, index) => `
+                      <tr class="bg-stone-900/40">
+                        <td class="pr-4 pl-8 py-2">${provider.name}</td>
+                        <td class="px-4 py-2">${provider.quantityAccepted}</td>
+                        <td class="px-4 py-2">${provider.quantityPaid}</td>
+                        <td class="px-4 py-2">${provider.quantitySuccess}</td>
+                        <td class="px-4 py-2">${provider.quantityAccepted + provider.quantityPaid + provider.quantitySuccess}</td>
+                      </tr>
+                    `).join('')}
+                `).join('')}
+            </tbody>
+          ` : `
+            <caption align="bottom" class="px-6 py-4">
+              <p class="text-sm text-left font-normal text-stone-300">No hay resultados</p>
+            </caption>
+          `}
+        </table>
+      `;
+
+      $("#tableContainer").html(tableContainer);
+      $('#defaultContainer').addClass('hidden');
+      $('#responseContainer').removeClass('hidden');
+    }
   </script>
 </body>
 

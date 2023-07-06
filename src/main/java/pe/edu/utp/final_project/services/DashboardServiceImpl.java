@@ -23,9 +23,14 @@ import com.opencsv.exceptions.CsvValidationException;
 import jakarta.servlet.http.HttpServletResponse;
 import pe.edu.utp.final_project.classes.LinkedList;
 import pe.edu.utp.final_project.classes.Node;
+import pe.edu.utp.final_project.classes.Tree;
+import pe.edu.utp.final_project.domain.dashboard.BuyItem;
 import pe.edu.utp.final_project.domain.dashboard.FiltersRequest;
 import pe.edu.utp.final_project.domain.dashboard.SearchItem;
 import pe.edu.utp.final_project.domain.dashboard.SearchResponse;
+import pe.edu.utp.final_project.domain.dashboard.StatisticsResponse;
+import pe.edu.utp.final_project.domain.dashboard.statistics.Entity;
+import pe.edu.utp.final_project.domain.dashboard.statistics.Provider;
 
 @Service
 public class DashboardServiceImpl implements IDashboardService {
@@ -235,5 +240,52 @@ public class DashboardServiceImpl implements IDashboardService {
 
     document.add(table);
     document.close();
+  }
+
+  @Override
+  public StatisticsResponse<Entity> getStatisticsEntityProvider(String type) {
+    if (type.equals("1")) {
+      try {
+        String filePath = "./src/main/resources/files/ReportePCBienes202201.csv";
+        FileReader fileReader = new FileReader(filePath);
+
+        try (CSVReader openCSVReader = new CSVReaderBuilder(fileReader)
+            .withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()) {
+          String[] record;
+
+          int cont = 0;
+          Tree<BuyItem> root = new Tree<>();
+          StatisticsResponse<Entity> response = new StatisticsResponse<>();
+
+          while ((record = openCSVReader.readNext()) != null) {
+            if (cont != 0) {
+              BuyItem item = new BuyItem(record[0], Long.parseLong(record[1]), record[2], Long.parseLong(record[3]),
+                  record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11],
+                  Double.parseDouble(record[12]), Double.parseDouble(record[13]), Double.parseDouble(record[14]),
+                  record[15], record[16], record[17], record[18]);
+              root.insertByRucProveedor(item);
+            }
+            cont++;
+          }
+
+          BuyItem[] entityItems = root.getUniqueEntities();
+          Entity[] entities = new Entity[entityItems.length];
+
+          for (int i = 0; i < entityItems.length; i++) {
+            Provider[] providers = root.getUniqueProvidersByEntity(entityItems[i].getEntidad());
+            entities[i] = new Entity(entityItems[i].getEntidad(), providers);
+          }
+
+          response.setResults(entities);
+
+          return response;
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      } catch (CsvValidationException e) {
+        e.printStackTrace();
+      }
+    }
+    return null;
   }
 }

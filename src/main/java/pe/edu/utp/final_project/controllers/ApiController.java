@@ -18,6 +18,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import pe.edu.utp.final_project.domain.dashboard.ExportRequestBody;
 import pe.edu.utp.final_project.domain.dashboard.SearchRequestBody;
 import pe.edu.utp.final_project.domain.dashboard.SearchResponse;
+import pe.edu.utp.final_project.domain.dashboard.StatisticsRequestBody;
+import pe.edu.utp.final_project.domain.dashboard.StatisticsResponse;
+import pe.edu.utp.final_project.domain.dashboard.statistics.Entity;
 import pe.edu.utp.final_project.services.DashboardServiceImpl;
 
 @RestController
@@ -55,5 +58,11 @@ public class ApiController {
     String headerValue = "attachment; filename=reporte-" + currentDateTime + ".pdf";
     response.setHeader(headerKey, headerValue);
     dashboardServiceImpl.exportPDF(exportRequestBody.getResults(), response);
+  }
+
+  @PostMapping("/generar_estadistica")
+  public @ResponseBody StatisticsResponse<Entity> generarEstadistica(
+      @RequestBody StatisticsRequestBody statisticsRequestBody) {
+    return dashboardServiceImpl.getStatisticsEntityProvider(statisticsRequestBody.getType());
   }
 }
