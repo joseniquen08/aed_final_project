@@ -21,15 +21,13 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 
 import jakarta.servlet.http.HttpServletResponse;
-import pe.edu.utp.final_project.classes.LinkedList;
-import pe.edu.utp.final_project.classes.Node;
 import pe.edu.utp.final_project.classes.Tree;
 import pe.edu.utp.final_project.domain.dashboard.BuyItem;
 import pe.edu.utp.final_project.domain.dashboard.FiltersRequest;
-import pe.edu.utp.final_project.domain.dashboard.SearchItem;
 import pe.edu.utp.final_project.domain.dashboard.SearchResponse;
 import pe.edu.utp.final_project.domain.dashboard.StatisticsResponse;
 import pe.edu.utp.final_project.domain.dashboard.statistics.Entity;
+import pe.edu.utp.final_project.domain.dashboard.statistics.FrameworkAgreement;
 import pe.edu.utp.final_project.domain.dashboard.statistics.Provider;
 
 @Service
@@ -41,66 +39,54 @@ public class DashboardServiceImpl implements IDashboardService {
       String filePath = "./src/main/resources/files/ReportePCBienes202201.csv";
       FileReader fileReader = new FileReader(filePath);
 
-      try (CSVReader openCSVReader = new CSVReaderBuilder(fileReader)
+      try (CSVReader openCsvReader = new CSVReaderBuilder(fileReader)
           .withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()) {
         String[] record;
 
         int cont = 0;
         String[] arrayHeader = new String[19];
         SearchResponse response = new SearchResponse();
-        LinkedList<SearchItem> list = new LinkedList<>();
+        Tree<BuyItem> root = new Tree<>();
 
-        while ((record = openCSVReader.readNext()) != null) {
+        while ((record = openCsvReader.readNext()) != null) {
           if (cont == 0) {
             for (int i = 0; i < 19; i++) {
               arrayHeader[i] = record[i];
             }
           } else {
             boolean hasFilter = false;
-            if (record[Integer.parseInt(type)].equals(value)) {
-              for (int i = 0; i < filters.length; i++) {
-                if (record[filters[i].getHeader()].equals(filters[i].getValue())) {
-                  hasFilter = true;
-                }
+            for (int i = 0; i < filters.length; i++) {
+              if (record[filters[i].getHeader()].equals(filters[i].getValue())) {
+                hasFilter = true;
               }
-              if (!hasFilter) {
-                SearchItem item = new SearchItem(record[0], record[1], record[2], record[3],
-                    record[4], record[5],
-                    record[6], record[7], record[8], record[9], record[10], record[11],
-                    record[12], record[13],
-                    record[14],
-                    record[15], record[16], record[17], record[18]);
-                list.addToEnd(item);
-              }
+            }
+            if (!hasFilter) {
+              BuyItem item = new BuyItem(record[0], Long.parseLong(record[1]), record[2], Long.parseLong(record[3]),
+                  record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11],
+                  Double.parseDouble(record[12]), Double.parseDouble(record[13]), Double.parseDouble(record[14]),
+                  record[15], record[16], record[17], record[18]);
+              root.insertByType(item, Integer.parseInt(type));
             }
           }
           cont++;
         }
 
-        int totalPages = (int) Math.ceil((double) list.size() / 5);
+        BuyItem[] resultItems = root.getItemsByType(Integer.parseInt(type), value);
+
+        int totalPages = (int) Math.ceil((double) resultItems.length / 5);
         int[] pages = new int[totalPages];
 
-        int length = totalPages == page && list.size() % 5 != 0 ? list.size() % 5 : 5;
+        int length = totalPages == page && resultItems.length % 5 != 0 ? resultItems.length % 5 : 5;
 
-        SearchItem[] items = new SearchItem[list.size() != 0 ? length : 0];
-        SearchItem[] itemsTotal = new SearchItem[list.size()];
-
-        Node<SearchItem> currentNode = list.header;
-        Node<SearchItem> currentNodeTotal = list.header;
+        BuyItem[] items = new BuyItem[resultItems.length != 0 ? length : 0];
 
         int auxCont = 0;
 
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < resultItems.length; i++) {
           if (i >= (page - 1) * 5 && i < page * 5) {
-            items[auxCont] = currentNode.getValue();
+            items[auxCont] = resultItems[i];
             auxCont++;
           }
-          currentNode = currentNode.getNext();
-        }
-
-        for (int i = 0; i < list.size(); i++) {
-          itemsTotal[i] = currentNodeTotal.getValue();
-          currentNodeTotal = currentNodeTotal.getNext();
         }
 
         for (int i = 0; i < pages.length; i++) {
@@ -109,10 +95,10 @@ public class DashboardServiceImpl implements IDashboardService {
 
         response.setHeaders(arrayHeader);
         response.setResults(items);
-        response.setResultsTotal(itemsTotal);
+        response.setResultsTotal(resultItems);
         response.setValue(value);
         response.setType(type);
-        response.setTotal(list.size());
+        response.setTotal(resultItems.length);
         response.setPage(page);
         response.setPages(pages);
 
@@ -127,14 +113,14 @@ public class DashboardServiceImpl implements IDashboardService {
   }
 
   @Override
-  public void exportPDF(SearchItem[] results, HttpServletResponse response)
+  public void exportPDF(BuyItem[] results, HttpServletResponse response)
       throws DocumentException, IOException {
     Document document = new Document(PageSize.A4.rotate(), 10, 10, 10, 10);
     PdfWriter.getInstance(document, response.getOutputStream());
     document.open();
 
     Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-    fontTitle.setSize(16);
+    fontTitle.setSize(18);
 
     Paragraph paragraph = new Paragraph("Resultados de la búsqueda");
     paragraph.setAlignment(Paragraph.ALIGN_CENTER);
@@ -148,63 +134,63 @@ public class DashboardServiceImpl implements IDashboardService {
 
     PdfPCell cell = new PdfPCell();
     cell.setBackgroundColor(Color.WHITE);
-    cell.setPadding(3);
+    cell.setPadding(2);
 
     Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
     fontHeader.setColor(Color.BLACK);
-    fontHeader.setSize(8);
+    fontHeader.setSize(6);
 
-    cell.setPhrase(new Paragraph("FECHA_PROCESO", fontHeader));
+    cell.setPhrase(new Paragraph("FECHA DE PROCESO", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("RUC_PROVEEDOR", fontHeader));
+    cell.setPhrase(new Paragraph("RUC DE PROVEEDOR", fontHeader));
     table.addCell(cell);
     cell.setPhrase(new Paragraph("PROVEEDOR", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("RUC_ENTIDAD", fontHeader));
+    cell.setPhrase(new Paragraph("RUC DE ENTIDAD", fontHeader));
     table.addCell(cell);
     cell.setPhrase(new Paragraph("ENTIDAD", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("TIPO_PROCEDIMIENTO", fontHeader));
+    cell.setPhrase(new Paragraph("TIPO DE PROCEDIMIENTO", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("ORDEN_ELECTRÓNICA", fontHeader));
+    cell.setPhrase(new Paragraph("ORDEN ELECTRÓNICA", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("ORDEN_ELECTRÓNICA_GENERADA", fontHeader));
+    cell.setPhrase(new Paragraph("ORDEN ELECTRÓNICA GENERADA", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("ESTADO_ORDEN_ELECTRÓNICA", fontHeader));
+    cell.setPhrase(new Paragraph("ESTADO DE ORDEN ELECTRÓNICA", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("DOCUMENTO_ESTADO_OCAM", fontHeader));
+    cell.setPhrase(new Paragraph("DOCUMENTO DE ESTADO OCAM", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("FECHA_FORMALIZACIÓN", fontHeader));
+    cell.setPhrase(new Paragraph("FECHA DE FORMALIZACIÓN", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("FECHA_ÚLTIMO_ESTADO", fontHeader));
+    cell.setPhrase(new Paragraph("FECHA DE ÚLTIMO ESTADO", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("SUB_TOTAL", fontHeader));
+    cell.setPhrase(new Paragraph("SUBTOTAL", fontHeader));
     table.addCell(cell);
     cell.setPhrase(new Paragraph("IGV", fontHeader));
     table.addCell(cell);
     cell.setPhrase(new Paragraph("TOTAL", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("ORDEN_DIGITALIZADA", fontHeader));
+    cell.setPhrase(new Paragraph("ORDEN DIGITALIZADA", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("DESCRIPCIÓN_ESTADO", fontHeader));
+    cell.setPhrase(new Paragraph("DESCRIPCIÓN DE ESTADO", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("DESCRIPCIÓN_CESIÓN_DERECHOS", fontHeader));
+    cell.setPhrase(new Paragraph("DESCRIPCIÓN DE CESIÓN DE DERECHOS", fontHeader));
     table.addCell(cell);
-    cell.setPhrase(new Paragraph("ACUERDO_MARCO", fontHeader));
+    cell.setPhrase(new Paragraph("ACUERDO MARCO", fontHeader));
     table.addCell(cell);
 
     Font fontBody = FontFactory.getFont(FontFactory.HELVETICA);
     fontBody.setColor(Color.BLACK);
-    fontBody.setSize(8);
+    fontBody.setSize(7);
 
-    for (SearchItem item : results) {
+    for (BuyItem item : results) {
       cell.setPhrase(new Paragraph(item.getFechaProceso(), fontBody));
       table.addCell(cell);
-      cell.setPhrase(new Paragraph(item.getRucProveedor(), fontBody));
+      cell.setPhrase(new Paragraph(Long.toString(item.getRucProveedor()), fontBody));
       table.addCell(cell);
       cell.setPhrase(new Paragraph(item.getProveedor(), fontBody));
       table.addCell(cell);
-      cell.setPhrase(new Paragraph(item.getRucEntidad(), fontBody));
+      cell.setPhrase(new Paragraph(Long.toString(item.getRucEntidad()), fontBody));
       table.addCell(cell);
       cell.setPhrase(new Paragraph(item.getEntidad(), fontBody));
       table.addCell(cell);
@@ -222,11 +208,11 @@ public class DashboardServiceImpl implements IDashboardService {
       table.addCell(cell);
       cell.setPhrase(new Paragraph(item.getFechaUltimoEstado(), fontBody));
       table.addCell(cell);
-      cell.setPhrase(new Paragraph(item.getSubTotal(), fontBody));
+      cell.setPhrase(new Paragraph(Double.toString(item.getSubTotal()), fontBody));
       table.addCell(cell);
-      cell.setPhrase(new Paragraph(item.getIgv(), fontBody));
+      cell.setPhrase(new Paragraph(Double.toString(item.getIgv()), fontBody));
       table.addCell(cell);
-      cell.setPhrase(new Paragraph(item.getTotal(), fontBody));
+      cell.setPhrase(new Paragraph(Double.toString(item.getTotal()), fontBody));
       table.addCell(cell);
       cell.setPhrase(new Paragraph(item.getOrdenDigitalizada(), fontBody));
       table.addCell(cell);
@@ -243,49 +229,115 @@ public class DashboardServiceImpl implements IDashboardService {
   }
 
   @Override
-  public StatisticsResponse<Entity> getStatisticsEntityProvider(String type) {
-    if (type.equals("1")) {
-      try {
-        String filePath = "./src/main/resources/files/ReportePCBienes202201.csv";
-        FileReader fileReader = new FileReader(filePath);
+  public StatisticsResponse<Entity> getStatisticsEntityProvider(FiltersRequest[] filters) {
+    try {
+      String filePath = "./src/main/resources/files/ReportePCBienes202201.csv";
+      FileReader fileReader = new FileReader(filePath);
 
-        try (CSVReader openCSVReader = new CSVReaderBuilder(fileReader)
-            .withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()) {
-          String[] record;
+      try (CSVReader openCSVReader = new CSVReaderBuilder(fileReader)
+          .withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()) {
+        String[] record;
 
-          int cont = 0;
-          Tree<BuyItem> root = new Tree<>();
-          StatisticsResponse<Entity> response = new StatisticsResponse<>();
+        int cont = 0;
+        Tree<BuyItem> root = new Tree<>();
+        StatisticsResponse<Entity> response = new StatisticsResponse<>();
 
-          while ((record = openCSVReader.readNext()) != null) {
-            if (cont != 0) {
+        while ((record = openCSVReader.readNext()) != null) {
+          if (cont != 0) {
+            boolean hasFilter = false;
+            for (int i = 0; i < filters.length; i++) {
+              if (record[filters[i].getHeader()].equals(filters[i].getValue())) {
+                hasFilter = true;
+              }
+            }
+            if (!hasFilter) {
               BuyItem item = new BuyItem(record[0], Long.parseLong(record[1]), record[2], Long.parseLong(record[3]),
                   record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11],
                   Double.parseDouble(record[12]), Double.parseDouble(record[13]), Double.parseDouble(record[14]),
                   record[15], record[16], record[17], record[18]);
-              root.insertByRucProveedor(item);
+              root.insertByType(item, 1);
             }
-            cont++;
           }
-
-          BuyItem[] entityItems = root.getUniqueEntities();
-          Entity[] entities = new Entity[entityItems.length];
-
-          for (int i = 0; i < entityItems.length; i++) {
-            Provider[] providers = root.getUniqueProvidersByEntity(entityItems[i].getEntidad());
-            entities[i] = new Entity(entityItems[i].getEntidad(), providers);
-          }
-
-          response.setResults(entities);
-
-          return response;
+          cont++;
         }
-      } catch (IOException e) {
-        e.printStackTrace();
-      } catch (CsvValidationException e) {
-        e.printStackTrace();
+
+        BuyItem[] entityItems = root.getUniqueEntities();
+        Entity[] entities = new Entity[entityItems.length];
+
+        for (int i = 0; i < entityItems.length; i++) {
+          Provider[] providers = root.getUniqueProvidersByEntity(entityItems[i].getEntidad());
+          entities[i] = new Entity(entityItems[i].getEntidad(), providers);
+        }
+
+        response.setResults(entities);
+
+        return response;
       }
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (CsvValidationException e) {
+      e.printStackTrace();
     }
+    return null;
+  }
+
+  @Override
+  public StatisticsResponse<FrameworkAgreement> getStatisticsFAProvider(FiltersRequest[] filters) {
+    try {
+      String filePath = "./src/main/resources/files/ReportePCBienes202201.csv";
+      FileReader fileReader = new FileReader(filePath);
+
+      try (CSVReader openCSVReader = new CSVReaderBuilder(fileReader)
+          .withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()) {
+        String[] record;
+
+        int cont = 0;
+        Tree<BuyItem> root = new Tree<>();
+        StatisticsResponse<FrameworkAgreement> response = new StatisticsResponse<>();
+
+        while ((record = openCSVReader.readNext()) != null) {
+          if (cont != 0) {
+            boolean hasFilter = false;
+            for (int i = 0; i < filters.length; i++) {
+              if (record[filters[i].getHeader()].equals(filters[i].getValue())) {
+                hasFilter = true;
+              }
+            }
+            if (!hasFilter) {
+              BuyItem item = new BuyItem(record[0], Long.parseLong(record[1]), record[2], Long.parseLong(record[3]),
+                  record[4], record[5], record[6], record[7], record[8], record[9], record[10], record[11],
+                  Double.parseDouble(record[12]), Double.parseDouble(record[13]), Double.parseDouble(record[14]),
+                  record[15], record[16], record[17], record[18]);
+              root.insertByType(item, 1);
+            }
+          }
+          cont++;
+        }
+
+        BuyItem[] frameworkAgreementsItems = root.getUniqueFrameworkAgreements();
+
+        FrameworkAgreement[] frameworkAgreements = new FrameworkAgreement[frameworkAgreementsItems.length];
+
+        for (int i = 0; i < frameworkAgreementsItems.length; i++) {
+          Provider[] providers = root
+              .getUniqueProvidersByFrameworkAgreement(frameworkAgreementsItems[i].getAcuerdoMarco());
+          frameworkAgreements[i] = new FrameworkAgreement(frameworkAgreementsItems[i].getAcuerdoMarco(), providers);
+        }
+
+        response.setResults(frameworkAgreements);
+
+        return response;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (CsvValidationException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  @Override
+  public StatisticsResponse<Entity> getStatisticsFADayOfMonth() {
     return null;
   }
 }

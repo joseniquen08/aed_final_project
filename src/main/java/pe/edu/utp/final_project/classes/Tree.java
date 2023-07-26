@@ -1,11 +1,10 @@
 package pe.edu.utp.final_project.classes;
 
 import pe.edu.utp.final_project.domain.dashboard.BuyItem;
-import pe.edu.utp.final_project.domain.dashboard.SearchItem;
 import pe.edu.utp.final_project.domain.dashboard.statistics.Provider;
 
 public class Tree<E> {
-  TreeNode<E> root;
+  private TreeNode<E> root;
 
   public Tree() {
     this.root = null;
@@ -16,7 +15,7 @@ public class Tree<E> {
   }
 
   public TreeNode<E> getRoot() {
-    return root;
+    return this.root;
   }
 
   public TreeNode<E> insertNode(TreeNode<E> node, E value) {
@@ -32,22 +31,28 @@ public class Tree<E> {
     return node;
   }
 
-  public void printInOrder() {
-    printInOrderRecursive(this.root);
+  public int size() {
+    return sizeRecursive(this.root);
   }
 
-  public void printInOrderRecursive(TreeNode<E> node) {
-    if (node != null) {
-      printInOrderRecursive(node.getLeft());
-      System.out.println(((SearchItem) node.getValue()).getRucProveedor() + " | ");
-      printInOrderRecursive(node.getRight());
+  public int sizeRecursive(TreeNode<E> currNode) {
+    if (currNode == null) {
+      return 0;
+    } else {
+      return 1 + sizeRecursive(currNode.getLeft()) + sizeRecursive(currNode.getRight());
     }
   }
 
+  // ------------------------------------------------
   // specific methods for this project
+  // ------------------------------------------------
 
-  public void insertByRucProveedor(E item) {
-    this.root = insertNodeByRucProveedor(this.root, item);
+  public void insertByType(E item, int type) {
+    if (type == 1) {
+      this.root = insertNodeByRucEntidad(this.root, item);
+    } else {
+      this.root = insertNodeByRucProveedor(this.root, item);
+    }
   }
 
   public TreeNode<E> insertNodeByRucProveedor(TreeNode<E> node, E item) {
@@ -63,16 +68,63 @@ public class Tree<E> {
     return node;
   }
 
-  public TreeNode<E> searchUniqueProvidersByEntity(TreeNode<E> node, String entity) {
-    if (node != null) {
-      node.setLeft(searchUniqueProvidersByEntity(node.getLeft(), entity));
-      if (((BuyItem) node.getValue()).getEntidad().equals(entity)) {
-        return node;
+  public TreeNode<E> insertNodeByRucEntidad(TreeNode<E> node, E item) {
+    if (node == null) {
+      return new TreeNode<>(item);
+    } else {
+      if (((BuyItem) item).getRucEntidad() < ((BuyItem) node.getValue()).getRucEntidad()) {
+        node.setLeft(insertNodeByRucEntidad(node.getLeft(), item));
+      } else {
+        node.setRight(insertNodeByRucEntidad(node.getRight(), item));
       }
-      node.setRight(searchUniqueProvidersByEntity(node.getRight(), entity));
     }
-    return null;
+    return node;
   }
+
+  public BuyItem[] getItemsByType(int type, String value) {
+    BuyItem[] items = new BuyItem[0];
+    return getItemsByTypeRecursive(this.root, items, type, value);
+  }
+
+  public BuyItem[] getItemsByTypeRecursive(TreeNode<E> node, BuyItem[] items, int type, String value) {
+    try {
+      if (node != null) {
+        items = getItemsByTypeRecursive(node.getLeft(), items, type, value);
+        if (type == 1) {
+          if (((BuyItem) node.getValue()).getRucProveedor() == Long.parseLong(value)) {
+            items = addToArray(items, (BuyItem) node.getValue());
+          }
+        } else if (type == 3) {
+          if (((BuyItem) node.getValue()).getRucEntidad() == Long.parseLong(value)) {
+            items = addToArray(items, (BuyItem) node.getValue());
+          }
+        } else if (type == 10) {
+          if (((BuyItem) node.getValue()).getFechaFormalizacion().equals(value)) {
+            items = addToArray(items, (BuyItem) node.getValue());
+          }
+        } else if (type == 18) {
+          if (((BuyItem) node.getValue()).getAcuerdoMarco().equals(value)) {
+            items = addToArray(items, (BuyItem) node.getValue());
+          }
+        }
+        items = getItemsByTypeRecursive(node.getRight(), items, type, value);
+      }
+      return items;
+    } catch (NumberFormatException e) {
+      return new BuyItem[0];
+    }
+  }
+
+  public BuyItem[] addToArray(BuyItem[] items, BuyItem item) {
+    BuyItem[] newItems = new BuyItem[items.length + 1];
+    for (int i = 0; i < items.length; i++) {
+      newItems[i] = items[i];
+    }
+    newItems[items.length] = item;
+    return newItems;
+  }
+
+  // ================================================
 
   public BuyItem[] getUniqueEntities() {
     BuyItem[] entities = new BuyItem[0];
@@ -157,4 +209,94 @@ public class Tree<E> {
     }
     return newProviders;
   }
+
+  // ================================================
+
+  public BuyItem[] getUniqueFrameworkAgreements() {
+    BuyItem[] frameworkAgreements = new BuyItem[0];
+    return getUniqueFrameworkAgreementsRecursive(this.root, frameworkAgreements);
+  }
+
+  public BuyItem[] getUniqueFrameworkAgreementsRecursive(TreeNode<E> node, BuyItem[] frameworkAgreements) {
+    if (node != null) {
+      frameworkAgreements = getUniqueFrameworkAgreementsRecursive(node.getLeft(), frameworkAgreements);
+      if (!isFrameworkAgreementInArray(frameworkAgreements, ((BuyItem) node.getValue()).getAcuerdoMarco())) {
+        frameworkAgreements = addFrameworkAgreementToArray(frameworkAgreements, (BuyItem) node.getValue());
+      }
+      frameworkAgreements = getUniqueFrameworkAgreementsRecursive(node.getRight(), frameworkAgreements);
+    }
+    return frameworkAgreements;
+  }
+
+  public boolean isFrameworkAgreementInArray(BuyItem[] frameworkAgreements, String frameworkAgreement) {
+    for (BuyItem item : frameworkAgreements) {
+      if (item.getAcuerdoMarco().equals(frameworkAgreement)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public BuyItem[] addFrameworkAgreementToArray(BuyItem[] frameworkAgreements, BuyItem frameworkAgreement) {
+    BuyItem[] newFrameworkAgreements = new BuyItem[frameworkAgreements.length + 1];
+    for (int i = 0; i < frameworkAgreements.length; i++) {
+      newFrameworkAgreements[i] = frameworkAgreements[i];
+    }
+    newFrameworkAgreements[frameworkAgreements.length] = frameworkAgreement;
+    return newFrameworkAgreements;
+  }
+
+  public Provider[] getUniqueProvidersByFrameworkAgreement(String frameworkAgreement) {
+    Provider[] providers = new Provider[0];
+    return getUniqueProvidersByFrameworkAgreementRecursive(this.root, providers, frameworkAgreement);
+  }
+
+  public Provider[] getUniqueProvidersByFrameworkAgreementRecursive(TreeNode<E> node, Provider[] providers,
+      String frameworkAgreement) {
+    if (node != null) {
+      providers = getUniqueProvidersByFrameworkAgreementRecursive(node.getLeft(), providers, frameworkAgreement);
+      if (((BuyItem) node.getValue()).getAcuerdoMarco().equals(frameworkAgreement)) {
+        if (!isProviderInFAArray(providers, ((BuyItem) node.getValue()).getTotal(),
+            ((BuyItem) node.getValue()).getProveedor(),
+            ((BuyItem) node.getValue()).getEstadoOrdenElectronica())) {
+          providers = addProviderToFAArray(providers, (BuyItem) node.getValue());
+        }
+      }
+      providers = getUniqueProvidersByFrameworkAgreementRecursive(node.getRight(), providers, frameworkAgreement);
+    }
+    return providers;
+  }
+
+  public boolean isProviderInFAArray(Provider[] providers, Double total, String provider, String estado) {
+    for (Provider item : providers) {
+      if (item.getName().equals(provider)) {
+        if (estado.equals("ACEPTADA")) {
+          item.setQuantityAccepted(item.getQuantityAccepted() + total);
+        } else if (estado.equals("PAGADA")) {
+          item.setQuantityPaid(item.getQuantityPaid() + total);
+        } else if (estado.equals("RESUELTA")) {
+          item.setQuantitySuccess(item.getQuantitySuccess() + total);
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public Provider[] addProviderToFAArray(Provider[] providers, BuyItem provider) {
+    Provider[] newProviders = new Provider[providers.length + 1];
+    for (int i = 0; i < providers.length; i++) {
+      newProviders[i] = providers[i];
+    }
+    if (provider.getEstadoOrdenElectronica().equals("ACEPTADA")) {
+      newProviders[newProviders.length - 1] = new Provider(provider.getProveedor(), provider.getTotal(), 0, 0);
+    } else if (provider.getEstadoOrdenElectronica().equals("PAGADA")) {
+      newProviders[newProviders.length - 1] = new Provider(provider.getProveedor(), 0, provider.getTotal(), 0);
+    } else if (provider.getEstadoOrdenElectronica().equals("RESUELTA")) {
+      newProviders[newProviders.length - 1] = new Provider(provider.getProveedor(), 0, 0, provider.getTotal());
+    }
+    return newProviders;
+  }
+
+  // ================================================
 }

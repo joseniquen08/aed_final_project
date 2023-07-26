@@ -3,6 +3,7 @@ package pe.edu.utp.final_project.services;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class AuthServiceImpl implements IAuthService {
   public boolean authLogin(Login login) {
     try {
       String filePath = "./src/main/resources/files/Usuarios.csv";
-      FileReader fileReader = new FileReader(filePath);
+      FileReader fileReader = new FileReader(filePath, Charset.forName("UTF-8"));
 
       try (CSVReader openCSVReader = new CSVReader(fileReader)) {
         String[] record;
@@ -45,7 +46,7 @@ public class AuthServiceImpl implements IAuthService {
   public boolean authRegister(Register register) {
     try {
       String filePath = "./src/main/resources/files/Usuarios.csv";
-      FileWriter fileWriter = new FileWriter(filePath, true);
+      FileWriter fileWriter = new FileWriter(filePath, Charset.forName("UTF-8"), true);
 
       CSVWriter openCsvWriter = new CSVWriter(fileWriter);
       String[] record = { register.getFullname(), register.getUsername(),

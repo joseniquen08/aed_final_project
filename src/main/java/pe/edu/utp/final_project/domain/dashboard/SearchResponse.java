@@ -2,8 +2,8 @@ package pe.edu.utp.final_project.domain.dashboard;
 
 public class SearchResponse {
   private String[] headers;
-  private SearchItem[] results;
-  private SearchItem[] resultsTotal;
+  private BuyItem[] results;
+  private BuyItem[] resultsTotal;
   private String value;
   private String type;
   private int total;
@@ -18,19 +18,19 @@ public class SearchResponse {
     this.headers = headers;
   }
 
-  public SearchItem[] getResults() {
+  public BuyItem[] getResults() {
     return results;
   }
 
-  public void setResults(SearchItem[] results) {
+  public void setResults(BuyItem[] results) {
     this.results = results;
   }
 
-  public SearchItem[] getResultsTotal() {
+  public BuyItem[] getResultsTotal() {
     return resultsTotal;
   }
 
-  public void setResultsTotal(SearchItem[] resultsTotal) {
+  public void setResultsTotal(BuyItem[] resultsTotal) {
     this.resultsTotal = resultsTotal;
   }
 

@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="https://www.geoperu.gob.pe/favicon.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -27,33 +28,40 @@
   <section class="bg-stone-900 h-screen w-full">
     <div class="h-full w-full flex justify-center items-center">
       <form action="#" th:action="@{/registerAction}" th:object="${registerObject}" method="post"
-        class="max-w-md w-full border border-green-500 rounded-xl px-10 py-8 text-center flex flex-col space-y-5 shadow-lg shadow-green-500/50">
+        class="max-w-md w-full border-2 border-green-500/60 hover:border-green-500/80 rounded-2xl px-10 py-8 text-center flex flex-col space-y-5">
         <h1 class="text-4xl font-medium text-green-500" th:text="'Bienvenid@'" />
         <p class="text-sm font-medium text-gray-500">
           Registra tus datos para acceder al sistema
         </p>
-        <div class="text-white flex flex-col space-y-2.5">
-          <div class="flex flex-col items-start space-y-1">
-            <label for="" class="text-sm">Nombres</label>
-            <input type="text" required th:field="*{fullname}"
-              class="bg-transparent px-3 py-1.5 border w-full rounded-lg" />
+        <div class="text-white flex flex-col space-y-4">
+          <div class="relative">
+            <input type="text" id="fullname" required autocomplete="off" th:field="*{fullname}"
+              class="block px-4 pb-2 pt-3 w-full text-sm text-white bg-transparent rounded-lg border border-gray-300 appearance-none peer"
+              placeholder=" ">
+            <label for="fullname"
+              class="absolute text-sm text-white duration-300 transform -translate-y-4 scale-[0.85] top-1.5 z-10 origin-[0] bg-stone-900 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1.5 peer-focus:scale-[0.85] peer-focus:-translate-y-4 left-3">Nombres</label>
           </div>
-          <div class="flex flex-col items-start space-y-1">
-            <label for="" class="text-sm">Usuario</label>
-            <input type="text" required th:field="*{username}"
-              class="bg-transparent px-3 py-1.5 border w-full rounded-lg" />
+          <div class="relative">
+            <input type="text" id="username" required autocomplete="off" th:field="*{username}"
+              class="block px-4 pb-2 pt-3 w-full text-sm text-white bg-transparent rounded-lg border border-gray-300 appearance-none peer"
+              placeholder=" ">
+            <label for="username"
+              class="absolute text-sm text-white duration-300 transform -translate-y-4 scale-[0.85] top-1.5 z-10 origin-[0] bg-stone-900 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1.5 peer-focus:scale-[0.85] peer-focus:-translate-y-4 left-3">Usuario</label>
           </div>
-          <div class="flex flex-col items-start space-y-1">
-            <label for="" class="text-sm">Contraseña</label>
-            <input type="password" required th:field="*{password}"
-              class="bg-transparent px-3 py-1.5 border w-full rounded-lg" />
+          <div class="relative">
+            <input type="password" id="password" required autocomplete="off" th:field="*{password}"
+              class="block px-4 pb-2 pt-3 w-full text-sm text-white bg-transparent rounded-lg border border-gray-300 appearance-none peer"
+              placeholder=" ">
+            <label for="password"
+              class="absolute text-sm text-white duration-300 transform -translate-y-4 scale-[0.85] top-1.5 z-10 origin-[0] bg-stone-900 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1.5 peer-focus:scale-[0.85] peer-focus:-translate-y-4 left-3">Contraseña</label>
           </div>
         </div>
         <button type="submit" class="bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg">
           Registrar
         </button>
         <p class="text-sm font-medium text-gray-500">
-          ¿Ya tienes una cuenta? <a th:href="@{/login}">Inicia sesión aquí</a>
+          ¿Ya tienes una cuenta? <a th:href="@{/login}" class="underline underline-offset-2 hover:text-gray-400">Inicia
+            sesión aquí</a>
         </p>
       </form>
     </div>

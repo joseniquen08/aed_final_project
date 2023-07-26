@@ -12,24 +12,24 @@
       <div class="w-full h-full bg-stone-800 rounded-lg flex flex-col text-white px-8 py-6 space-y-8">
         <img src="/images/logo_mef.png" alt="" class="w-48 rounded" />
         <p class="text-xl font-medium">Sistema de Búsquedas y Estadísticas</p>
-        <ul class="flex flex-col space-y-5">
+        <ul class="flex flex-col space-y-3">
           <li>
             <a th:href="@{/}"
-              th:classappend="${module == 'index' ? 'bg-green-500 shadow-lg shadow-green-600/50 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
+              th:classappend="${module == 'index' ? 'bg-green-500 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
               class="inline-flex w-full px-4 py-2 rounded-lg">
               Inicio
             </a>
           </li>
           <li>
             <a th:href="@{/buscar}"
-              th:classappend="${module == 'buscar' ? 'bg-green-500 shadow-lg shadow-green-600/50 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
+              th:classappend="${module == 'buscar' ? 'bg-green-500 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
               class="inline-flex w-full px-4 py-2 rounded-lg">
               Búsquedas
             </a>
           </li>
           <li>
             <a th:href="@{/estadisticas}"
-              th:classappend="${module == 'estadisticas' ? 'bg-green-500 shadow-lg shadow-green-600/50 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
+              th:classappend="${module == 'estadisticas' ? 'bg-green-500 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
               class="inline-flex w-full px-4 py-2 rounded-lg">
               Estadísticas
             </a>
@@ -56,21 +56,21 @@
         <ul class="flex flex-col space-y-5">
           <li>
             <a th:href="@{/}"
-              th:classappend="${module == 'index' ? 'bg-green-500 shadow-lg shadow-green-600/50 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
+              th:classappend="${module == 'index' ? 'bg-green-500 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
               class="inline-flex w-full px-4 py-2 rounded-lg">
               Inicio
             </a>
           </li>
           <li>
             <a th:href="@{/buscar}"
-              th:classappend="${module == 'buscar' ? 'bg-green-500 shadow-lg shadow-green-600/50 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
+              th:classappend="${module == 'buscar' ? 'bg-green-500 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
               class="inline-flex w-full px-4 py-2 rounded-lg">
               Búsquedas
             </a>
           </li>
           <li>
             <a th:href="@{/estadisticas}"
-              th:classappend="${module == 'estadisticas' ? 'bg-green-500 shadow-lg shadow-green-600/50 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
+              th:classappend="${module == 'estadisticas' ? 'bg-green-500 font-medium hover:bg-green-600' : 'hover:bg-stone-900'}"
               class="inline-flex w-full px-4 py-2 rounded-lg">
               Estadísticas
             </a>

@@ -1,13 +1,13 @@
 package pe.edu.utp.final_project.domain.dashboard;
 
 public class StatisticsRequestBody {
-  private String type;
+  private FiltersRequest[] filters;
 
-  public String getType() {
-    return type;
+  public FiltersRequest[] getFilters() {
+    return filters;
   }
 
-  public void setType(String type) {
-    this.type = type;
+  public void setFilters(FiltersRequest[] filters) {
+    this.filters = filters;
   }
 }

@@ -4,6 +4,11 @@ public class FrameworkAgreement {
   private String name;
   private Provider[] providers;
 
+  public FrameworkAgreement(String name, Provider[] providers) {
+    this.name = name;
+    this.providers = providers;
+  }
+
   public String getName() {
     return name;
   }

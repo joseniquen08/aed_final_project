@@ -13,6 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+  <link rel="icon" type="image/x-icon" href="https://www.geoperu.gob.pe/favicon.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
     integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
@@ -55,14 +56,17 @@
       <div class="w-full pl-2 pr-2 md:pr-4 pb-4" style="height: calc(100vh - 5rem)">
         <div class="px-6 py-6 bg-stone-800 rounded-lg h-full overflow-y-auto text-white">
           <div class="grid grid-cols-12 gap-4 pb-6 border-b border-stone-400">
-            <div class="flex flex-col space-y-1.5 col-span-12 md:col-span-5">
-              <label for="" class="text-sm">Ingresar dato</label>
-              <input type="text" name="query" id="query" required autocomplete="off"
-                class="bg-transparent px-3 py-1.5 border border-stone-400 w-full rounded-lg focus:ring-green-500 focus:border-green-500" />
+            <div class="relative col-span-12 md:col-span-5">
+              <input type="text" id="query" name="query" required autocomplete="off"
+                class="block px-4 pb-2 pt-3 w-full text-sm text-white bg-transparent rounded-lg border border-stone-400 focus:ring-green-500 focus:border-green-500 appearance-none peer"
+                placeholder=" ">
+              <label for="query"
+                class="absolute text-sm text-white duration-300 transform -translate-y-4 scale-[0.85] top-1.5 z-10 origin-[0] bg-stone-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-1.5 peer-focus:scale-[0.85] peer-focus:-translate-y-4 left-3">Ingresar
+                dato</label>
             </div>
             <div class="col-span-12 md:col-span-4 flex items-end">
               <select name="type" id="type" required
-                class="w-full bg-stone-800 py-1.5 px-3 border border-stone-400 rounded-lg focus:ring-green-500 focus:border-green-500">
+                class="w-full bg-stone-800 py-2 px-3 border border-stone-400 rounded-lg focus:ring-green-500 focus:border-green-500">
                 <option value="" hidden>Seleccionar campo</option>
                 <option value="1">RUC de proveedor</option>
                 <option value="3">RUC de entidad</option>
@@ -393,6 +397,8 @@
       }
 
       $("#tableContainer").html(tableContainer);
+      $('#tableContainer').animate({ scrollTop: 0 }, "slow");
+      $("#tableContainer").animate({ scrollLeft: 0 }, "slow");
       $("#defaultContainer").addClass("hidden");
       $("#responseContainer").removeClass("hidden");
     }

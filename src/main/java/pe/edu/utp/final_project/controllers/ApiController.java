@@ -21,6 +21,7 @@ import pe.edu.utp.final_project.domain.dashboard.SearchResponse;
 import pe.edu.utp.final_project.domain.dashboard.StatisticsRequestBody;
 import pe.edu.utp.final_project.domain.dashboard.StatisticsResponse;
 import pe.edu.utp.final_project.domain.dashboard.statistics.Entity;
+import pe.edu.utp.final_project.domain.dashboard.statistics.FrameworkAgreement;
 import pe.edu.utp.final_project.services.DashboardServiceImpl;
 
 @RestController
@@ -60,9 +61,33 @@ public class ApiController {
     dashboardServiceImpl.exportPDF(exportRequestBody.getResults(), response);
   }
 
-  @PostMapping("/generar_estadistica")
-  public @ResponseBody StatisticsResponse<Entity> generarEstadistica(
+  @PostMapping("/generar_estadistica_1")
+  public @ResponseBody StatisticsResponse<Entity> generarEstadistica1(
       @RequestBody StatisticsRequestBody statisticsRequestBody) {
-    return dashboardServiceImpl.getStatisticsEntityProvider(statisticsRequestBody.getType());
+    return dashboardServiceImpl.getStatisticsEntityProvider(statisticsRequestBody.getFilters());
+  }
+
+  @PostMapping("/generar_estadistica_1/filtrar")
+  public @ResponseBody StatisticsResponse<Entity> filtrar1(
+      @RequestBody StatisticsRequestBody statisticsRequestBody) {
+    return dashboardServiceImpl.getStatisticsEntityProvider(statisticsRequestBody.getFilters());
+  }
+
+  @PostMapping("/generar_estadistica_2")
+  public @ResponseBody StatisticsResponse<FrameworkAgreement> generarEstadistica2(
+      @RequestBody StatisticsRequestBody statisticsRequestBody) {
+    return dashboardServiceImpl.getStatisticsFAProvider(statisticsRequestBody.getFilters());
+  }
+
+  @PostMapping("/generar_estadistica_2/filtrar")
+  public @ResponseBody StatisticsResponse<FrameworkAgreement> filtrar2(
+      @RequestBody StatisticsRequestBody statisticsRequestBody) {
+    return dashboardServiceImpl.getStatisticsFAProvider(statisticsRequestBody.getFilters());
+  }
+
+  @PostMapping("/generar_estadistica_3")
+  public @ResponseBody StatisticsResponse<Entity> generarEstadistica3(
+      @RequestBody StatisticsRequestBody statisticsRequestBody) {
+    return dashboardServiceImpl.getStatisticsFADayOfMonth();
   }
 }

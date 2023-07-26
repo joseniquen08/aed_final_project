@@ -1,6 +1,6 @@
 package pe.edu.utp.final_project.classes;
 
-import pe.edu.utp.final_project.domain.dashboard.SearchItem;
+import pe.edu.utp.final_project.domain.dashboard.BuyItem;
 
 public class LinkedList<E> {
   public Node<E> header;
@@ -94,8 +94,8 @@ public class LinkedList<E> {
         int j = i;
 
         while (j >= gap
-            && Long.parseLong(((SearchItem) this.getNodeAt(j - gap).getValue()).getRucProveedor()) > Long
-                .parseLong(((SearchItem) currentNode.getValue()).getRucProveedor())) {
+            && ((BuyItem) this.getNodeAt(j - gap).getValue()).getRucProveedor() > ((BuyItem) currentNode.getValue())
+                .getRucProveedor()) {
           this.getNodeAt(j).setValue(this.getNodeAt(j - gap).getValue());
           j -= gap;
         }
